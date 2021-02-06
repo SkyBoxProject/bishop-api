@@ -1,0 +1,5 @@
+imports:
+  - 'grumphp_tasks.yml'
+parameters:
+  git_hook_variables:
+    EXEC_GRUMPHP_COMMAND: 'docker exec -t bishops_php-fpm_1'

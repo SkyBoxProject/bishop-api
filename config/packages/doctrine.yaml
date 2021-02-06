@@ -1,0 +1,27 @@
+doctrine:
+    dbal:
+        schema_filter: /^(?!view_|sessions)/
+        url: '%env(resolve:DATABASE_URL)%'
+        mapping_types:
+            enum: string
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '13'
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        default_entity_manager: default
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                auto_mapping: true
+                dql:
+                    datetime_functions:
+                        NOW: DoctrineExtensions\Query\Mysql\Now
+#                mappings:
+#                    AndroidSubscription:
+#                        mapping: true
+#                        type: annotation
+#                        dir: '%kernel.project_dir%/src/Domain/Entity'
+#                        alias: AndroidSubscription
+#                        prefix: 'AppBundle\Domain\AndroidSubscription\Entity'
+#                        is_bundle: false

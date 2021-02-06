@@ -1,0 +1,49 @@
+services:
+    AppBundle\Domain\User\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Domain/User/*'
+        exclude: '%kernel.root_dir%/../src/AppBundle/Domain/User/{Entity,Command,Query,ValueObject,Event,EventSubscribers,Exception}'
+        autowire: true
+
+    AppBundle\Domain\User\Command\Handler\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Domain/User/Command/Handler/*Handler.php'
+        autowire: true
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: command }
+
+    AppBundle\Domain\User\Query\Handler\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Domain/User/Query/Handler/*Handler.php'
+        autowire: true
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: query }
+
+    AppBundle\Domain\User\Command\Handler\SendDownloadLinkHandler:
+        class: AppBundle\Domain\User\Command\Handler\SendDownloadLinkHandler
+        autowire: true
+        arguments:
+            $androidDownloadLink: '%android_download_link%'
+            $iosDownloadLink: '%ios_download_link%'
+            $intervalInSecondsBetweenSendingMessages: '%interval_in_seconds_between_sending_sms_messages%'
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: command }
+
+    AppBundle\Domain\User\Command\Handler\RewriteAvatarHandler:
+        class: AppBundle\Domain\User\Command\Handler\RewriteAvatarHandler
+        autowire: true
+        arguments:
+            $avatarDirectory: '%avatar_directory%'
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: command }
+
+    AppBundle\Domain\User\Command\Handler\ResetPasswordHandler:
+        class: AppBundle\Domain\User\Command\Handler\ResetPasswordHandler
+        autowire: true
+        arguments:
+            $userManipulator: '@fos_user.util.user_manipulator'
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: command }
+
+    AppBundle\Domain\User\EventSubscribers\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Domain/User/EventSubscribers/*'
+        autowire: true
+        tags:
+            - 'kernel.event_subscriber'

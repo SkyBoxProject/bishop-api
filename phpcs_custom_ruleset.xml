@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<ruleset name="Shred Standard">
+    <rule ref="PSR2" />
+
+    <rule ref="src/Module/CodingStandard" />
+
+    <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony">
+        <exclude name="Symfony.Commenting.ClassComment"/>
+        <exclude name="Symfony.Commenting.FunctionComment"/>
+        <exclude name="Symfony.Functions.ScopeOrder"/>
+        <exclude name="Symfony.Functions.Arguments"/>
+        <exclude name="Symfony.ControlStructure.YodaConditions"/>
+        <exclude name="Symfony.NamingConventions.ValidClassName"/>
+        <exclude name="Symfony.Commenting.License"/>
+        <exclude name="Zend.NamingConventions.ValidVariableName.MemberVarContainsNumbers" />
+    </rule>
+
+    <!-- Line length limit -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="170"/>
+            <property name="absoluteLineLimit" value="170"/>
+        </properties>
+    </rule>
+
+    <rule ref="Generic.Files.LineLength.MaxExceeded">
+        <message>Line contains %2$s chars, which is more than the limit of %1$s</message>
+    </rule>
+
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <message>Line longer than %s characters; contains %s characters</message>
+    </rule>
+
+    <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard">
+        <exclude name="SlevomatCodingStandard.Classes.ClassStructure"/> <!-- need to slightly change the order of the methods -->
+        <exclude name="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
+        <exclude name="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousTraitNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing"/>
+        <exclude name="SlevomatCodingStandard.Commenting.DisallowCommentAfterCode" />
+        <exclude name="SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment"/>
+        <exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing"/>
+        <exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>
+        <exclude name="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
+        <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName"/>
+        <exclude name="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
+        <exclude name="SlevomatCodingStandard.Functions.TrailingCommaInCall"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces"/>
+        <exclude name="SlevomatCodingStandard.Numbers.DisallowNumericLiteralSeparator"/>
+        <exclude name="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator"/>
+        <exclude name="SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators"/>
+        <exclude name="SlevomatCodingStandard.PHP.RequireExplicitAssertion"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true"/>
+            <property name="ignoredAnnotations" type="array" value="@group"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Files.LineLength">
+        <properties>
+            <property name="lineLengthLimit" value="170"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
+        <properties>
+            <property name="minLineLength" value="170"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces">
+        <properties>
+            <property name="ignoreSpacesInAnnotation" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- excluded unused private elements rule for entities -->
+    <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements">
+        <exclude-pattern>src/*/Entity/*\.php</exclude-pattern>
+    </rule>
+
+    <!-- excluded "does not have native type hint rule" for commands -->
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+        <exclude-pattern>src/*/Command/*(Command|Trait)\.php</exclude-pattern>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.FunctionSpacing">
+        <properties>
+            <property name="spacing" value="1"/>
+            <property name="spacingBeforeFirst" value="0"/>
+            <property name="spacingAfterLast" value="0"/>
+        </properties>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing"/>
+
+</ruleset>

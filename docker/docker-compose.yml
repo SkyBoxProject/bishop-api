@@ -1,0 +1,90 @@
+version: '3'
+
+services:
+    workspace:
+        image: busybox:latest
+        volumes:
+            - ../var/logs:/var/www/logs
+            - ../:/var/www/public
+            - mysql:/var/lib/mysql:rw
+            - redis:/data
+            - ./services/nginx/logs:/var/log/nginx
+            - ./services/nginx/sites:/etc/nginx/conf.d
+
+    php-fpm:
+        build:
+            context: ./services/php
+            args:
+                - "XDEBUG_ON=${XDEBUG_ON}"
+                - "XDEBUG_AUTOSTART=${XDEBUG_AUTOSTART}"
+                - "XDEBUG_IDEKEY=${XDEBUG_IDEKEY}"
+                - "XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST}"
+                - "XDEBUG_PORT=${XDEBUG_PORT}"
+        ports:
+            - 9000
+        volumes:
+          - ../var/logs:/var/www/logs
+          - ../:/var/www/public
+          - mysql:/var/lib/mysql:rw
+          - redis:/data
+          - ./services/nginx/logs:/var/log/nginx
+          - ./services/nginx/sites:/etc/nginx/conf.d
+
+    nginx:
+        build:
+            context: ./services/nginx
+        ports:
+            - 80:80
+        depends_on:
+            - php-fpm
+        volumes:
+          - ../var/logs:/var/www/logs
+          - ../:/var/www/public
+          - mysql:/var/lib/mysql:rw
+          - redis:/data
+          - ./services/nginx/logs:/var/log/nginx
+          - ./services/nginx/sites:/etc/nginx/conf.d
+
+    mysql:
+        build:
+            context: ./services/mysql
+        environment:
+            - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+            - "MYSQL_USER=${MYSQL_USER}"
+            - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+            - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+        volumes:
+          - ../var/logs:/var/www/logs
+          - ../:/var/www/public
+          - mysql:/var/lib/mysql:rw
+          - redis:/data
+          - ./services/nginx/logs:/var/log/nginx
+          - ./services/nginx/sites:/etc/nginx/conf.d
+
+    redis:
+        image: redis:6.0.8
+        volumes:
+          - ../var/logs:/var/www/logs
+          - ../:/var/www/public
+          - mysql:/var/lib/mysql:rw
+          - redis:/data
+          - ./services/nginx/logs:/var/log/nginx
+          - ./services/nginx/sites:/etc/nginx/conf.d
+
+volumes:
+    php-fpm:
+        driver: "local"
+    nginx:
+        driver: "local"
+    mysql:
+        driver: "local"
+    redis:
+        driver: "local"
+
+networks:
+    internal:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.201.64/27

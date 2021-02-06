@@ -1,0 +1,38 @@
+services:
+    AppBundle\Domain\AndroidSubscription\Repository\AndroidSubscriptionRepository:
+        class: AppBundle\Domain\AndroidSubscription\Repository\AndroidSubscriptionRepository
+        autowire: true
+        public: true
+
+    AppBundle\Domain\AndroidSubscription\Command\Handler\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Domain/AndroidSubscription/Command/Handler'
+        autowire: true
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: command }
+
+    AppBundle\Domain\AndroidSubscription\Query\Handler\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Domain/AndroidSubscription/Query/Handler/*Handler.php'
+        autowire: true
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: query }
+
+    AppBundle\Domain\AndroidSubscription\Command\Handler\CreateAndroidSubscriptionHandler:
+        class: AppBundle\Domain\AndroidSubscription\Command\Handler\CreateAndroidSubscriptionHandler
+        autowire: true
+        arguments:
+            $androidPackageName: '%android_package_name%'
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: command }
+
+    AppBundle\Domain\AndroidSubscription\Command\Handler\UpdateAndroidSubscriptionHandler:
+        class: AppBundle\Domain\AndroidSubscription\Command\Handler\UpdateAndroidSubscriptionHandler
+        autowire: true
+        arguments:
+            $androidPackageName: '%android_package_name%'
+        tags:
+            - { name: 'tactician.handler', typehints: true, bus: command }
+
+    AppBundle\Domain\AndroidSubscription\Resolver\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Domain/AndroidSubscription/Resolver'
+        autowire: true
+

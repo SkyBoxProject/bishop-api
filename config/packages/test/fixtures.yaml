@@ -1,0 +1,9 @@
+services:
+    Tests\DataFixtures\ORM\:
+        resource: '../../tests/DataFixtures/ORM'
+        tags: ['doctrine.fixture.orm']
+        autowire: true
+
+    Tests\DataFixtures\Common\:
+        resource: '../../tests/DataFixtures/Common/*'
+        public: true

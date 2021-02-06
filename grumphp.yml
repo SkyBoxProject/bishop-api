@@ -1,0 +1,39 @@
+parameters:
+    hooks_dir: ~
+    hooks_preset: local
+    git_hook_variables:
+        EXEC_GRUMPHP_COMMAND: 'docker exec -t bishops_php-fpm_1'
+    tasks:
+        phpmd:
+            exclude: [ 'vendor', 'migrations', 'tests' ]
+            ruleset: [ 'phpmd_custom_ruleset' ]
+            triggered_by: [ 'php' ]
+        phpcpd:
+            exclude:
+                - 'vendor'
+                - 'web'
+                - 'var'
+                - 'migrations'
+                - 'tests'
+            # @todo change on names_exclude @see https://github.com/phpro/grumphp/issues/475 and update grumphp to new version
+            # regexps_exclude:
+            #  - 'AccomplishmentBuilderV3.php'
+            fuzzy: false
+            triggered_by: [ 'php' ]
+        phpcs:
+            standard: phpcs_custom_ruleset.xml
+            whitelist_patterns:
+                - /^src\/(.*)/
+                - /^app\/(.*)/
+        git_blacklist:
+            keywords:
+                - "die("
+                - "var_dump("
+                - "exit;"
+                - "sleep("
+                - "dump("
+            whitelist_patterns: [ ]
+            triggered_by: [ 'php' ]
+            regexp_type: G
+        # temporary disabled while bundle not will be replaced in src
+        # composer: ~
