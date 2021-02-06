@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace App\Tests;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;

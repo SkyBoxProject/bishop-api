@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Traits;
+namespace App\Tests\Traits;
 
 trait DataFixtureTrait
 {

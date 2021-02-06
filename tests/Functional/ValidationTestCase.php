@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional;
+namespace App\Tests\Functional;
 
 use Liip\FunctionalTestBundle\Validator\DataCollectingValidator;
 use Liip\TestFixturesBundle\Test\FixturesTrait;

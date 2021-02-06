@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional;
+namespace App\Tests\Functional;
 
 use App\Kernel;
 use Doctrine\ORM\EntityManager;
@@ -11,11 +11,9 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Tests\Traits\FileSystemTrait;
 
 abstract class TestCase extends WebTestCase
 {
-    use FileSystemTrait;
     use FixturesTrait;
 
     protected static function getKernelClass(): string

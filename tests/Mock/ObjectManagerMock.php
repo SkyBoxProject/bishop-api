@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Mock;
+namespace App\Tests\Mock;
 
 use Doctrine\Persistence\ObjectManager;
 use function PHPUnit\Framework\throwException;

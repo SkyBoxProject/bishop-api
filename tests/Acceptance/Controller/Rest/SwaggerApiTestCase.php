@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Acceptance\Controller\Rest;
+namespace App\Tests\Acceptance\Controller\Rest;
 
 use ByJG\ApiTools\AbstractRequester;
 use ByJG\ApiTools\Base\Schema;
