@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * @final
  */
-class AppBundle extends Bundle
+class App extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {

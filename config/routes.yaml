@@ -1,3 +1,11 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+web:
+    resource: '@App/Controller/Web/'
+    type: annotation
+    host: '%web_domain%'
+    schemes: ['%http_scheme%']
+
+api_v1:
+    resource: '@App/Controller/Rest/v1/'
+    type: annotation
+    host: '%api_domain%'
+    schemes: ['%http_scheme%']

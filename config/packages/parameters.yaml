@@ -1,0 +1,5 @@
+parameters:
+    http_scheme: 'http'
+    base_domain: 'bishop.localhost'
+    web_domain: '%base_domain%'
+    api_domain: 'api.%base_domain%'

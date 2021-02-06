@@ -1,0 +1,19 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: 'Bishop'
+            description: This is an awesome app!
+            version: 1.0.0
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+
+#nelmio_cors:
+#    defaults:
+#        allow_credentials: false
+#        allow_origin: [ '*' ]
+#        allow_headers: [ '*' ]
+#        allow_methods: [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ]
+#        max_age: 3600
+#        hosts: [ ]
+#        origin_regex: false
