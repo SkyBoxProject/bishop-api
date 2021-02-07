@@ -2,7 +2,7 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name bishop.localhost api.bishop.localhost;
+    server_name bishop.localhost api.bishop.localhost api.localhost;
     root /var/www/public/public;
 
     location / {

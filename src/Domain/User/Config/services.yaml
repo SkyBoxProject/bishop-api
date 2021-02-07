@@ -3,3 +3,14 @@ services:
         class: App\Domain\User\Repository\UserRepository
         autowire: true
         public: true
+
+    App\Domain\User\Command\Handler\:
+        resource: '%kernel.project_dir%/src/Domain/User/Command/Handler/*Handler.php'
+        autowire: true
+        tags: [ messenger.message_handler ]
+
+    App\Domain\User\Query\Handler\:
+        resource: '%kernel.project_dir%/src/Domain/User/Query/Handler/*Handler.php'
+        autowire: true
+        tags: [ messenger.message_handler ]
+

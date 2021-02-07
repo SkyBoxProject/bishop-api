@@ -1,5 +1,10 @@
 nelmio_api_doc:
     documentation:
+        servers:
+            -   url: 'http://%api_domain%'
+                description: API over HTTP
+            -   url: 'https://%api_domain%'
+                description: API over HTTPS
         info:
             title: 'Bishop'
             description: This is an awesome app!

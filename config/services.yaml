@@ -22,3 +22,19 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface:
+        class: Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory
+        public: true
+
+#    Nyholm\Psr7\Factory\Psr17Factory:
+#        class: Nyholm\Psr7\Factory\Psr17Factory
+#
+#    Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface:
+#        class: Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory
+#        public: true
+#        arguments:
+#            - '@Nyholm\Psr7\Factory\Psr17Factory'
+#            - '@Nyholm\Psr7\Factory\Psr17Factory'
+#            - '@Nyholm\Psr7\Factory\Psr17Factory'
+#            - '@Nyholm\Psr7\Factory\Psr17Factory'

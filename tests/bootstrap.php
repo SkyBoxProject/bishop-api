@@ -20,8 +20,8 @@ if (isset($_ENV['BOOTSTRAP_CLEAR_CACHE_ENV'])) {
     ));
 }
 
-if (
-    (!isset($_ENV['SKIP_RECREATE_DATABASE']) || $_ENV['SKIP_RECREATE_DATABASE'] === false)
+if (isset($_ENV['RECREATE_DATABASE'])
+    && filter_var($_ENV['RECREATE_DATABASE'], FILTER_VALIDATE_BOOL) === true
     && isset($_ENV['BOOTSTRAP_CLEAR_CACHE_ENV'])
 ) {
     passthru(sprintf(
@@ -46,5 +46,5 @@ $loader = require $file;
 if (file_exists(dirname(__DIR__).'/config/bootstrap.php')) {
     require dirname(__DIR__).'/config/bootstrap.php';
 } elseif (method_exists(Dotenv::class, 'bootEnv')) {
-    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env.test');
 }

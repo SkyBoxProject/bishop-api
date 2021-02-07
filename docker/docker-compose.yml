@@ -3,6 +3,8 @@ version: '3'
 services:
     workspace:
         image: busybox:latest
+        networks:
+            - internal
         volumes:
             - ../var/logs:/var/www/logs
             - ../:/var/www/public
@@ -22,6 +24,8 @@ services:
                 - "XDEBUG_PORT=${XDEBUG_PORT}"
         ports:
             - 9000
+        networks:
+            - internal
         volumes:
           - ../var/logs:/var/www/logs
           - ../:/var/www/public
@@ -37,6 +41,8 @@ services:
             - 80:80
         depends_on:
             - php-fpm
+        networks:
+            - internal
         volumes:
           - ../var/logs:/var/www/logs
           - ../:/var/www/public
@@ -53,6 +59,8 @@ services:
             - "MYSQL_USER=${MYSQL_USER}"
             - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
             - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+        networks:
+            - internal
         volumes:
           - ../var/logs:/var/www/logs
           - ../:/var/www/public
@@ -63,6 +71,8 @@ services:
 
     redis:
         image: redis:6.0.8
+        networks:
+            - internal
         volumes:
           - ../var/logs:/var/www/logs
           - ../:/var/www/public

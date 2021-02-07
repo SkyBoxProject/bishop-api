@@ -2,8 +2,10 @@
 
 namespace App\Controller\Rest\v1;
 
+use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Exception\UserNotFound;
+use App\Domain\User\Query\GetUserByEmailQuery;
 use App\Domain\User\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -15,6 +17,7 @@ use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
@@ -106,10 +109,10 @@ final class AuthController extends AbstractFOSRestController
 
         return new JsonResponse([
             'code' => JsonResponse::HTTP_OK,
-            'message' => 'success',
+            'message' => $this->translator->trans('Success', [], 'message'),
             'response' => [
                 'token' => $event->getData()['token'],
-                'refreshToken' => $event->getData()['refresh_token']
+                'refreshToken' => $event->getData()['refresh_token'],
             ],
         ]);
     }
@@ -154,19 +157,18 @@ final class AuthController extends AbstractFOSRestController
         if (empty($email) || empty($password)) {
             return new JsonResponse([
                 'code' => JsonResponse::HTTP_OK,
-                'message' => 'Email or password not be empty.',
+                'message' => $this->translator->trans('Email or password not be empty.', [], 'error'),
             ]);
         }
 
-        $user = new User();
-        $user
-            ->setEmail($email)
-            ->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $password
-            ));
-
-        $this->userRepository->save($user);
+        try {
+            $this->dispatchMessage(new CreateUserCommand($email, $password));
+        } catch (HandlerFailedException $exception) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_OK,
+                'message' => $this->translator->trans('Email already exists.', [], 'error'),
+            ]);
+        }
 
         return $this->login($request);
     }
@@ -183,7 +185,7 @@ final class AuthController extends AbstractFOSRestController
             'message' => 'success',
             'response' => [
                 'token' => $responseData['token'],
-                'refreshToken' => $responseData['refresh_token']
+                'refreshToken' => $responseData['refresh_token'],
             ],
         ]);
     }

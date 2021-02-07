@@ -2,6 +2,7 @@
 
 namespace App\Tests\Acceptance\Controller\Rest;
 
+use App\Tests\Acceptance\Util\ApiRequester;
 use ByJG\ApiTools\AbstractRequester;
 use ByJG\ApiTools\Base\Schema;
 use ByJG\ApiTools\Exception\DefinitionNotFoundException;
@@ -14,6 +15,8 @@ use ByJG\ApiTools\Exception\PathNotFoundException;
 use ByJG\ApiTools\Exception\StatusCodeNotMatchedException;
 use ByJG\Util\Psr7\MessageException;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class SwaggerApiTestCase extends WebTestCase
@@ -22,10 +25,10 @@ abstract class SwaggerApiTestCase extends WebTestCase
 
     protected ?Schema $schema;
 
+    protected ?AbstractRequester $requester = null;
+
     protected function setUp(): void
     {
-        parent::setUp();
-
         self::$kernel = static::bootKernel([]);
 
         $schema = Schema::getInstance(file_get_contents(self::$kernel->getCacheDir().'/../swagger.json'));
@@ -39,14 +42,36 @@ abstract class SwaggerApiTestCase extends WebTestCase
         parent::tearDown();
     }
 
+    /**
+     * @param Schema|null $schema
+     */
     public function setSchema($schema): void
     {
         $this->schema = $schema;
     }
 
+    public function setRequester(AbstractRequester $requester): void
+    {
+        $this->requester = $requester;
+    }
+
     /**
-     * @return mixed
-     *
+     * @return AbstractRequester
+     * @throws MessageException
+     */
+    protected function getRequester()
+    {
+        if (is_null($this->requester)) {
+            $this->requester = new ApiRequester(
+                self::$kernel,
+                self::$kernel->getContainer()->get(HttpFoundationFactoryInterface::class)
+            );
+        }
+
+        return $this->requester;
+    }
+
+    /**
      * @throws DefinitionNotFoundException
      * @throws GenericSwaggerException
      * @throws HttpMethodNotFoundException
@@ -54,23 +79,22 @@ abstract class SwaggerApiTestCase extends WebTestCase
      * @throws NotMatchedException
      * @throws PathNotFoundException
      * @throws StatusCodeNotMatchedException
-     * @throws InvalidRequestException
-     * @throws MessageException
+     * @throws MessageException|InvalidRequestException
      */
-    public function assertRequest(AbstractRequester $request)
+    public function assertRequest(AbstractRequester $request): ResponseInterface
     {
         // Add own schema if nothing is passed.
         if (!$request->hasSchema()) {
             $this->checkSchema();
-            $request->withSchema($this->schema);
+            $request = $request->withSchema($this->schema);
         }
 
-        // Request based on the Swagger Request definitions
+        // Request based on the Swagger Request definitios
         $body = $request->send();
 
         // Note:
         // This code is only reached if the send is successful and
-        // all matches are satisfied. Otherwise an error is threw before
+        // all matches are satisfied. Otherwise an error is throwed before
         // reach this
         self::assertTrue(true);
 

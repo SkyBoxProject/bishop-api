@@ -17,6 +17,18 @@
     "composer/xdebug-handler": {
         "version": "1.4.5"
     },
+    "dama/doctrine-test-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "56eaa387b5e48ebcc7c95a893b47dfa1ad51449c"
+        },
+        "files": [
+            "config/packages/test/dama_doctrine_test_bundle.yaml"
+        ]
+    },
     "dealerdirect/phpcodesniffer-composer-installer": {
         "version": "v0.7.1"
     },
@@ -393,6 +405,9 @@
             "phpcs.xml.dist"
         ]
     },
+    "symfony/amqp-messenger": {
+        "version": "v5.2.3"
+    },
     "symfony/asset": {
         "version": "v5.2.3"
     },
@@ -445,6 +460,9 @@
         "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
+        "version": "v5.2.3"
+    },
+    "symfony/doctrine-messenger": {
         "version": "v5.2.3"
     },
     "symfony/dom-crawler": {
@@ -554,6 +572,18 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/messenger": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "e9a414b113ceadbf4e52abe37bf8f1b443f06ccb"
+        },
+        "files": [
+            "config/packages/messenger.yaml"
+        ]
+    },
     "symfony/mime": {
         "version": "v5.2.3"
     },
@@ -657,6 +687,9 @@
         "version": "v1.3.0"
     },
     "symfony/rate-limiter": {
+        "version": "v5.2.3"
+    },
+    "symfony/redis-messenger": {
         "version": "v5.2.3"
     },
     "symfony/routing": {

@@ -9,3 +9,6 @@ services:
         resource: '../../../tests/DataFixtures/Common/*'
         autowire: true
         public: true
+
+liip_test_fixtures:
+    keep_database_and_schema: true

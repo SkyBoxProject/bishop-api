@@ -4,18 +4,23 @@ namespace App\Controller\Rest\v1;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Exception;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use OpenApi\Annotations\Operation;
 use OpenApi\Annotations\Parameter;
 use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 /**
  * @Route(condition="request.attributes.get('version') == 'v1'")
  */
-final class UsersController extends AbstractController
+final class UsersController extends AbstractFOSRestController
 {
 //    protected $userHandler;
 //    protected $logger;
@@ -23,104 +28,47 @@ final class UsersController extends AbstractController
 //    private $translator;
 //    private $usersService;
 //
+
+
+
     /**
-     * @OA\Get(path="/2.0/users/{username}",
-     *   operationId="getUserByName",
-     *   @OA\Parameter(name="username",
-     *     in="path",
-     *     required=true,
-     *     @OA\Schema(type="string")
-     *   ),
-     *   @OA\Response(response="200",
-     *     description="The User",
-     *     @OA\JsonContent(ref="#/components/schemas/user"),
-     *     @OA\Link(link="userRepositories", ref="#/components/links/UserRepositories")
-     *   )
+     *  @OA\Post(
+     *     path="/pets/{id}",
+     *     description="deletes a single pet based on the ID supplied",
+     *     operationId="deletePet",
+
+     *     @OA\Response(
+     *         response=204,
+     *         description="pet deleted"
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="unexpected error",
+     *         @OA\Schema(ref="#/components/schemas/ErrorModel")
+     *     )
      * )
+     *
+     * @Rest\Get("/status")
      */
-//
-//    public function __construct(
-//        UserHandler $userHandler,
-//        LoggerInterface $logger,
-//        ShredUserManager $shredUserManager,
-//        TranslatorInterface $translator,
-//        UsersService $usersService
-//    ) {
-//        $this->userHandler = $userHandler;
-//        $this->logger = $logger;
-//        $this->shredUserManager = $shredUserManager;
-//        $this->translator = $translator;
-//        $this->usersService = $usersService;
-//    }
-//
-//    /**
-//     * @Operation(
-//     *     tags={"Social"},
-//     *     summary="Follow to user, add to team",
-//     *     @SWG\Parameter(
-//     *          name="user_id",
-//     *          in="query",
-//     *          required=true,
-//     *          type="integer"
-//     *     ),
-//     *     @SWG\Response(
-//     *         response="200",
-//     *         description="Returned when successful",
-//     *         @SWG\Schema(
-//     *             @SWG\Property(
-//     *                 type="integer",
-//     *                 property="code",
-//     *                 example=200
-//     *             ),
-//     *             @SWG\Property(
-//     *                 type="string",
-//     *                 property="message"
-//     *             )
-//     *         )
-//     *     ),
-//     *     @SWG\Response(
-//     *         response="404",
-//     *         description="Returned when user with provided ID is not found",
-//     *         @SWG\Schema(
-//     *             @SWG\Property(
-//     *                 type="integer",
-//     *                 property="code",
-//     *                 example=404
-//     *             ),
-//     *             @SWG\Property(
-//     *                 type="string",
-//     *                 property="message"
-//     *             )
-//     *         )
-//     *     ),
-//     *     @SWG\Response(
-//     *         response="203",
-//     *         description="Returned when user trying to follow to himself or users are already followers",
-//     *         @SWG\Schema(
-//     *             @SWG\Property(
-//     *                 type="integer",
-//     *                 property="code",
-//     *                 example=203
-//     *             ),
-//     *             @SWG\Property(
-//     *                 type="string",
-//     *                 property="message"
-//     *             )
-//     *         )
-//     *     )
-//     * )
-//     *
-//     * @Rest\Get("/follow")
-//     */
-//    public function followAction(Request $request): JsonResponse
-//    {
-//        $this->usersService->followAction($request->query->get('user_id'), $this->getUser());
-//
-//        return JsonResponse::create([
-//            'code' => JsonResponse::HTTP_OK,
-//            'message' => $this->translator->trans('User is follower'),
-//        ]);
-//    }
+    public function followAction(Request $request): JsonResponse
+    {
+        return new JsonResponse([
+            'code' => JsonResponse::HTTP_OK,
+            'message' => 'success',
+        ]);
+    }
+
+    /**
+     *
+     * @Rest\Get("/getds")
+     */
+    public function followAction2(Request $request): JsonResponse
+    {
+        return new JsonResponse([
+            'code' => JsonResponse::HTTP_OK,
+            'message' => 'success2',
+        ]);
+    }
 
 //    /**
 //     * @Operation(
