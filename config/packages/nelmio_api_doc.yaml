@@ -4,9 +4,28 @@ nelmio_api_doc:
             title: 'Bishop'
             description: This is an awesome app!
             version: 1.0.0
+        components:
+            schemas:
+                tokenInfo:
+                    type: object
+                    properties:
+                        token:
+                            type: string
+                            example: "Bearer token"
+                        refreshToken:
+                            type: string
+                            example: "refresh_token"
     areas: # to filter documented areas
-        path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+        default:
+            host_patterns:
+                - ^api\.
+            path_patterns: # an array of regexps
+                - ^((?!doc).)*$
+            name_patterns:
+                - ^(.)*v1(.)*$
+            documentation:
+                security:
+                    - Bearer: [ ]
 
 #nelmio_cors:
 #    defaults:

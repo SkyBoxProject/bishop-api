@@ -1,0 +1,9 @@
+gesdinet_jwt_refresh_token:
+    ttl: 2592000
+    user_identity_field: email
+    ttl_update: true
+    firewall: api
+
+services:
+    Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken:
+        alias: 'gesdinet.jwtrefreshtoken'

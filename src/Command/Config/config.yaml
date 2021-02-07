@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Command\:
+        resource: '../../../src/Command/*'
+        tags: ['console.command']
+
+    App\Command\Development\ExportSwaggerCommand:
+        class: App\Command\Development\ExportSwaggerCommand
+        arguments:
+            $kernelProjectDir: '%kernel.project_dir%'
+            $apiDocGenerator: '@nelmio_api_doc.generator'
+        tags: [ 'console.command' ]

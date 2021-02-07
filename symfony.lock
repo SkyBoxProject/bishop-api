@@ -11,6 +11,9 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99.1"
     },
+    "composer/semver": {
+        "version": "3.2.4"
+    },
     "composer/xdebug-handler": {
         "version": "1.4.5"
     },
@@ -114,6 +117,18 @@
     "escapestudios/symfony2-coding-standard": {
         "version": "3.12.0"
     },
+    "friendsofphp/php-cs-fixer": {
+        "version": "2.16",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.16",
+            "ref": "c1947bad147704aeaf0285745f0baae927a58959"
+        },
+        "files": [
+            ".php_cs.dist"
+        ]
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
@@ -132,6 +147,9 @@
     "fzaninotto/faker": {
         "version": "v1.9.2"
     },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v0.10.1"
+    },
     "gitonomy/gitlib": {
         "version": "v1.2.3"
     },
@@ -147,6 +165,24 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
     },
+    "lcobucci/clock": {
+        "version": "2.0.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.1.0"
+    },
+    "lexik/jwt-authentication-bundle": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "5b2157bcd5778166a5696e42f552ad36529a07a6"
+        },
+        "files": [
+            "config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
     "liip/functional-test-bundle": {
         "version": "4.2.1"
     },
@@ -161,6 +197,9 @@
     },
     "myclabs/deep-copy": {
         "version": "1.10.2"
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
     },
     "nelmio/api-doc-bundle": {
         "version": "3.0",
@@ -198,6 +237,9 @@
     },
     "phar-io/version": {
         "version": "3.0.4"
+    },
+    "php-cs-fixer/diff": {
+        "version": "v1.3.1"
     },
     "php-http/message-factory": {
         "version": "v1.0.2"
@@ -479,6 +521,18 @@
     "symfony/intl": {
         "version": "v5.2.3"
     },
+    "symfony/lock": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "13350583a83fa636bf45a5fb62da3bdc73be52a1"
+        },
+        "files": [
+            "config/packages/lock.yaml"
+        ]
+    },
     "symfony/mailer": {
         "version": "4.3",
         "recipe": {
@@ -569,6 +623,12 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.22.0"
     },
+    "symfony/polyfill-php56": {
+        "version": "v1.20.0"
+    },
+    "symfony/polyfill-php70": {
+        "version": "v1.20.0"
+    },
     "symfony/polyfill-php73": {
         "version": "v1.22.0"
     },
@@ -595,6 +655,9 @@
     },
     "symfony/psr-http-message-bridge": {
         "version": "v1.3.0"
+    },
+    "symfony/rate-limiter": {
+        "version": "v5.2.3"
     },
     "symfony/routing": {
         "version": "5.1",

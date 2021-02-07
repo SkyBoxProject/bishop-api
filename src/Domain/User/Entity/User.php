@@ -2,14 +2,14 @@
 
 namespace App\Domain\User\Entity;
 
-use App\Domain\User\Repository\UserRepository;
+use App\Domain\User\Repository\UserBaseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Component\Uid\UuidV4;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Entity()
  *
  * @ORM\Table(name="`users`")
  *

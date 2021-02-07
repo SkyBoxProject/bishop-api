@@ -1,1 +1,5 @@
 services:
+    App\Domain\User\Repository\UserRepository:
+        class: App\Domain\User\Repository\UserRepository
+        autowire: true
+        public: true

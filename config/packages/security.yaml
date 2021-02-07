@@ -1,6 +1,6 @@
 security:
     encoders:
-        App\Entity\User:
+        App\Domain\User\Entity\User:
             algorithm: bcrypt
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
@@ -9,13 +9,19 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Domain\User\Entity\User
                 property: email
     firewalls:
         api:
-            pattern: ^/(?!doc|login|register|refresh).+
+            pattern: ^/(?!doc|login|register|token/refresh).+
             stateless: true
             host: '%api_domain%'
+            # by default, the feature allows 5 login attempts per minute
+            login_throttling: null
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -23,6 +29,8 @@ security:
             host: '%web_domain%'
             lazy: true
             provider: app_user_provider
+            # by default, the feature allows 5 login attempts per minute
+            login_throttling: null
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -39,3 +47,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/api/doc, role: ROLE_ADMIN }
+        - { host: '%api_domain%$', path: '^/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { host: '%api_domain%$', path: '^/(?!doc|login|register|token/refresh)', roles: IS_AUTHENTICATED_FULLY }
+        - { host: '%api_domain%$', path: '^/token/refresh', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+

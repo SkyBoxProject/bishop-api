@@ -40,6 +40,7 @@ RUN docker-php-ext-install opcache && \
     docker-php-ext-install soap && \
     docker-php-ext-install sockets && \
     docker-php-ext-install exif && \
+    docker-php-ext-install sysvsem && \
     docker-php-ext-install gettext
 
 RUN if [ ${XDEBUG_ON} = true ]; then \
