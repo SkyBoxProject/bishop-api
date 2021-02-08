@@ -8,21 +8,22 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-final class UserFixtures extends Fixture
+final class LoadUserFixtures extends Fixture
 {
+    public const REFERENCE_NAME = 'test_user';
+
     public const PLAIN_PASSWORD = 'test_password';
 
     private UserPasswordEncoderInterface $passwordEncoder;
 
-     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-     {
-         $this->passwordEncoder = $passwordEncoder;
-     }
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-
 
         $user = new User();
         $user
@@ -34,5 +35,7 @@ final class UserFixtures extends Fixture
 
         $manager->persist($user);
         $manager->flush();
+
+        $this->addReference(self::REFERENCE_NAME, $user);
     }
 }

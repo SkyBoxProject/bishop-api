@@ -14,6 +14,12 @@ if (isset($_ENV['BOOTSTRAP_CLEAR_CACHE_ENV'])) {
     ));
 
     passthru(sprintf(
+        'php "%s/../bin/console" gesdinet:jwt:clear --env=%s',
+        __DIR__,
+        $_ENV['BOOTSTRAP_CLEAR_CACHE_ENV']
+    ));
+
+    passthru(sprintf(
         'php "%s/../bin/console" api:swagger:export --env=%s',
         __DIR__,
         $_ENV['BOOTSTRAP_CLEAR_CACHE_ENV']

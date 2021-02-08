@@ -31,26 +31,53 @@ final class ApiExceptionListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if ($this->environment !== 'prod') {
+        if (!in_array($this->environment, ['prod', 'test'], true)) {
             return;
         }
 
         $exception = $event->getThrowable();
 
         $responseData = [
-            'code' => self::resolveStatusCode($exception),
+            'code' => self::resolveCode($exception),
             'message' => $this->resolveMessage($exception),
         ];
 
         $event->allowCustomResponseCode();
 
-        $event->setResponse(new JsonResponse($responseData));
+        $event->setResponse(new JsonResponse($responseData, self::resolveStatusCode($exception)));
     }
 
     private static function resolveStatusCode(Throwable $exception): int
     {
-        if (self::isHttpException($exception)) {
+        if ($exception instanceof HttpExceptionInterface) {
             return $exception->getStatusCode();
+        }
+
+        if ($exception instanceof ApiExceptionInterface) {
+            return Response::HTTP_OK;
+        }
+
+        if ($exception instanceof HandlerFailedException) {
+            return self::resolveStatusCode($exception->getPrevious());
+        }
+
+        if (self::isHttpStatusCode($exception->getCode())) {
+            return $exception->getCode();
+        }
+
+        return self::DEFAULT_ERROR_CODE;
+    }
+
+    private static function resolveCode(Throwable $exception): int
+    {
+        if ($exception instanceof HttpExceptionInterface
+            || $exception instanceof ApiExceptionInterface
+        ) {
+            return $exception->getStatusCode();
+        }
+
+        if ($exception instanceof HandlerFailedException) {
+            return self::resolveCode($exception->getPrevious());
         }
 
         if (self::isHttpStatusCode($exception->getCode())) {
@@ -62,7 +89,7 @@ final class ApiExceptionListener
 
     private static function isHttpStatusCode(?int $code): bool
     {
-        if (null === $code) {
+        if ($code === null) {
             return false;
         }
 
@@ -85,18 +112,17 @@ final class ApiExceptionListener
 
         $this->logError($exception);
 
-        return $this->translator->trans('An Internal Error Occurred. Please try again or contact email.', ['%support_email%' => $this->supportEmail], 'error');
-    }
-
-    private static function isHttpException(Throwable $exception): bool
-    {
-        return $exception instanceof HttpExceptionInterface
-            || $exception instanceof ApiExceptionInterface;
+        return $this->translator->trans(
+            'An Internal Error Occurred. Please try again or contact email.',
+            ['%support_email%' => $this->supportEmail],
+            'error'
+        );
     }
 
     private function logError(Throwable $exception): void
     {
-        $message = sprintf('Error from request. Message: %s, File(%s): %s, Trace: %s',
+        $message = sprintf(
+            'Error from request. Message: %s, File(%s): %s, Trace: %s',
             $exception->getMessage(),
             $exception->getLine(),
             $exception->getFile(),

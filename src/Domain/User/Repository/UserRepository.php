@@ -41,7 +41,7 @@ class UserRepository implements PasswordUpgraderInterface
         );
 
         if (!$isPasswordValid) {
-            throw new PasswordNotEquals('User password not equals!');
+            throw new PasswordNotEquals();
         }
 
         return $user;

@@ -21,6 +21,7 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+            entry_point: App\Security\EntryPoint\ApiAuthenticationEntryPoint
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -49,6 +50,7 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/api/doc, role: ROLE_ADMIN }
         - { host: '%api_domain%$', path: '^/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { host: '%api_domain%$', path: '^/(?!doc|login|register|token/refresh)', roles: IS_AUTHENTICATED_FULLY }
+        - { host: '%api_domain%$', path: '^/(?!doc|login|register|token/refresh|/token/check)', roles: IS_AUTHENTICATED_FULLY }
         - { host: '%api_domain%$', path: '^/token/refresh', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { host: '%api_domain%$', path: '^/token/check', roles: IS_AUTHENTICATED_ANONYMOUSLY }
 

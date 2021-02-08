@@ -7,9 +7,6 @@
          bootstrap="tests/bootstrap.php"
 >
     <php>
-        <env name="JWT_SECRET_KEY" value="tests/Keys/jwt_private.pem" />
-        <env name="JWT_PUBLIC_KEY" value="tests/Keys/jwt_public.pem" />
-        <env name="JWT_PASSPHRASE" value="test" />
         <env name="BOOTSTRAP_CLEAR_CACHE_ENV" value="test" />
         <env name="RECREATE_DATABASE" value="true" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />

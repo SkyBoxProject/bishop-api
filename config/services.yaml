@@ -27,6 +27,9 @@ services:
         class: Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory
         public: true
 
+    App\Security\EntryPoint\ApiAuthenticationEntryPoint:
+        autowire: true
+
 #    Nyholm\Psr7\Factory\Psr17Factory:
 #        class: Nyholm\Psr7\Factory\Psr17Factory
 #

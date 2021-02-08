@@ -2,6 +2,7 @@
 
 namespace App\Tests\Acceptance\Controller\Rest;
 
+use App\Domain\User\Entity\User;
 use App\Tests\Acceptance\Util\ApiRequester;
 use ByJG\ApiTools\AbstractRequester;
 use ByJG\ApiTools\Base\Schema;
@@ -14,6 +15,7 @@ use ByJG\ApiTools\Exception\NotMatchedException;
 use ByJG\ApiTools\Exception\PathNotFoundException;
 use ByJG\ApiTools\Exception\StatusCodeNotMatchedException;
 use ByJG\Util\Psr7\MessageException;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
@@ -27,9 +29,13 @@ abstract class SwaggerApiTestCase extends WebTestCase
 
     protected ?AbstractRequester $requester = null;
 
+    private JWTTokenManagerInterface $authManager;
+
     protected function setUp(): void
     {
         self::$kernel = static::bootKernel([]);
+
+        $this->authManager = self::$kernel->getContainer()->get('lexik_jwt_authentication.jwt_manager');
 
         $schema = Schema::getInstance(file_get_contents(self::$kernel->getCacheDir().'/../swagger.json'));
         $this->setSchema($schema);
@@ -109,5 +115,10 @@ abstract class SwaggerApiTestCase extends WebTestCase
         if (!$this->schema) {
             throw new GenericSwaggerException('You have to configure a schema for either the request or the testcase');
         }
+    }
+
+    protected function createToken(User $user): string
+    {
+        return sprintf('Bearer %s', $this->authManager->create($user));
     }
 }

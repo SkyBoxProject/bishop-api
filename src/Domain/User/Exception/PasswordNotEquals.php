@@ -16,12 +16,12 @@ final class PasswordNotEquals extends Exception implements ApiExceptionInterface
     {
         $this->translatableMessage = t('User password is wrong!', [], 'error');
 
-        parent::__construct($this->translatableMessage->getMessage(), 401, null);
+        parent::__construct($this->translatableMessage->getMessage(), 400, null);
     }
 
     public function getStatusCode(): int
     {
-        return Response::HTTP_UNAUTHORIZED;
+        return Response::HTTP_BAD_REQUEST;
     }
 
     public function getTranslatableMessage(): TranslatableMessage

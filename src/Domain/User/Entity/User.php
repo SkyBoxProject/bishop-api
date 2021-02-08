@@ -3,8 +3,8 @@
 namespace App\Domain\User\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -70,15 +70,32 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
 
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $roles[] = 'ROLE_USER';
+
+        $this->roles = array_unique($roles);
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        if (in_array($role, $this->getRoles(), true)) {
+            return $this;
+        }
+
+        $this->roles[] = $role;
 
         return $this;
     }
