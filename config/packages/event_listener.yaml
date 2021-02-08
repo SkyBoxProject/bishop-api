@@ -1,0 +1,12 @@
+services:
+    App\EventListener\:
+        resource: '%kernel.project_dir%/src/EventListener/*'
+        autowire: true
+        tags:
+            - { name: kernel.event_listener }
+
+    App\EventListener\ApiExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments:
+          [ '@translator.default', '@monolog.logger', '%support_email%', '%kernel.environment%' ]

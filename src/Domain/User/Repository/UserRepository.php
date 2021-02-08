@@ -3,19 +3,25 @@
 namespace App\Domain\User\Repository;
 
 use App\Domain\User\Entity\User;
+use App\Domain\User\Exception\PasswordNotEquals;
 use App\Domain\User\Exception\UserNotFound;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @final
  */
-class UserRepository
+class UserRepository implements PasswordUpgraderInterface
 {
     private EntityManagerInterface $entityRepository;
+
     private UserPasswordEncoderInterface $passwordEncoder;
+
     private ObjectRepository $userRepository;
 
     public function __construct(EntityManagerInterface $entityRepository, UserPasswordEncoderInterface $passwordEncoder)
@@ -35,7 +41,7 @@ class UserRepository
         );
 
         if (!$isPasswordValid) {
-            throw new UserNotFound();
+            throw new PasswordNotEquals('User password not equals!');
         }
 
         return $user;
@@ -52,11 +58,11 @@ class UserRepository
                 ->getQuery()
                 ->getSingleResult();
         } catch (NoResultException $exception) {
-            throw new UserNotFound();
+            throw new UserNotFound(sprintf('User not found by email "%s"', $email));
         }
 
-        if (null === $user) {
-            throw new UserNotFound();
+        if ($user === null) {
+            throw new UserNotFound(sprintf('User not found by email "%s"', $email));
         }
 
         return $user;
@@ -66,5 +72,15 @@ class UserRepository
     {
         $this->entityRepository->persist($user);
         $this->entityRepository->flush();
+    }
+
+    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+
+        $user->setPassword($newEncodedPassword);
+        $this->save($user);
     }
 }

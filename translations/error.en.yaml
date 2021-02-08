@@ -1,3 +1,5 @@
 'Email or password not be empty.': 'Email or password not be empty.'
 'User not found.': 'User not found.'
 'Email already exists.': 'Email already exists.'
+'An Internal Error Occurred. Please try again or contact email.': 'An Internal Error Occurred. Please try again or contact %support_email%'
+'User password is wrong!': 'User password is wrong!'

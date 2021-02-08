@@ -3,9 +3,7 @@
 namespace App\Controller\Rest\v1;
 
 use App\Domain\User\Command\CreateUserCommand;
-use App\Domain\User\Entity\User;
 use App\Domain\User\Exception\UserNotFound;
-use App\Domain\User\Query\GetUserByEmailQuery;
 use App\Domain\User\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -19,7 +17,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,20 +27,17 @@ final class AuthController extends AbstractFOSRestController
 {
     private JWTTokenManagerInterface $authManager;
     private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $passwordEncoder;
     private ContractsEventDispatcherInterface $dispatcher;
     private TranslatorInterface $translator;
 
     public function __construct(
         JWTTokenManagerInterface $authManager,
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder,
         ContractsEventDispatcherInterface $eventDispatcher,
         TranslatorInterface $translator
     ) {
         $this->authManager = $authManager;
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
         $this->dispatcher = $eventDispatcher;
         $this->translator = $translator;
     }
@@ -69,10 +63,10 @@ final class AuthController extends AbstractFOSRestController
      *         )
      *     ),
      *     @OA\Response(
-     *         response="422",
+     *         response="400",
      *         description="Returned when email or password empty",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=422),
+     *             @OA\Property(property="code", type="integer", example=400),
      *             @OA\Property(property="message", type="string")
      *         )
      *     )
@@ -87,19 +81,12 @@ final class AuthController extends AbstractFOSRestController
 
         if (empty($email) || empty($password)) {
             return new JsonResponse([
-                'code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
                 'message' => $this->translator->trans('Email or password not be empty.', [], 'error'),
             ]);
         }
 
-        try {
-            $user = $this->userRepository->getByEmailAndPassword($email, $password);
-        } catch (UserNotFound $exception) {
-            return new JsonResponse([
-                'code' => JsonResponse::HTTP_NOT_FOUND,
-                'message' => $this->translator->trans('User not found.', [], 'error'),
-            ]);
-        }
+        $user = $this->userRepository->getByEmailAndPassword($email, $password);
 
         $token = $this->authManager->create($user);
 
@@ -138,10 +125,10 @@ final class AuthController extends AbstractFOSRestController
      *         )
      *     ),
      *     @OA\Response(
-     *         response="422",
+     *         response="400",
      *         description="Returned when email or password empty",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=422),
+     *             @OA\Property(property="code", type="integer", example=400),
      *             @OA\Property(property="message", type="string")
      *         )
      *     )
@@ -156,10 +143,13 @@ final class AuthController extends AbstractFOSRestController
 
         if (empty($email) || empty($password)) {
             return new JsonResponse([
-                'code' => JsonResponse::HTTP_OK,
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
                 'message' => $this->translator->trans('Email or password not be empty.', [], 'error'),
             ]);
         }
+
+        $this->dispatchMessage(new CreateUserCommand($email, $password));
+
 
         try {
             $this->dispatchMessage(new CreateUserCommand($email, $password));

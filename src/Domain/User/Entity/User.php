@@ -2,7 +2,6 @@
 
 namespace App\Domain\User\Entity;
 
-use App\Domain\User\Repository\UserBaseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;

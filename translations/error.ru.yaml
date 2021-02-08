@@ -1,3 +1,5 @@
 'Email or password not be empty.': 'Email или password не может быть пустым.'
 'User not found.': 'Пользователь не найден.'
 'Email already exists.': 'Email уже зарегистрирован.'
+'An Internal Error Occurred. Please try again or contact email.': 'Внутренняя ошибка. Пожалуйста, повторите попытку или свяжитесь с нами %support_email%'
+'User password is wrong!': 'Пароль пользователя неверен!'
