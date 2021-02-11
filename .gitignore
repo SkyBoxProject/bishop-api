@@ -38,3 +38,7 @@
 ###< friendsofphp/php-cs-fixer ###
 
 .env
+
+docker/services/nginx/sites/*.vhost
+
+config/keys/jwt/

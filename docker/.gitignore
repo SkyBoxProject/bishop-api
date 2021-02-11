@@ -137,3 +137,4 @@ typings/
 /redis
 
 docker-compose.override.yml
+nginx/sites/*.vhost
