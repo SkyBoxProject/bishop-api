@@ -4,6 +4,9 @@ namespace App\Controller\Rest\v1;
 
 use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Repository\UserRepository;
+use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken;
@@ -93,12 +96,15 @@ final class AuthController extends AbstractFOSRestController
 
         $this->dispatcher->dispatch($event, Events::AUTHENTICATION_SUCCESS);
 
+        $tokenTTL = $this->getParameter('lexik_jwt_authentication.token_ttl');
+
         return new JsonResponse([
             'code' => JsonResponse::HTTP_OK,
             'message' => $this->translator->trans('Success', [], 'message'),
             'response' => [
                 'token' => $event->getData()['token'],
                 'refreshToken' => $event->getData()['refresh_token'],
+                'tokenExpires' => (new DateTime())->setTimezone(new DateTimeZone('UTC'))->modify(sprintf('%s seconds', $tokenTTL))->format(DateTimeInterface::ATOM),
             ],
         ]);
     }
@@ -201,12 +207,15 @@ final class AuthController extends AbstractFOSRestController
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
+        $tokenTTL = $this->getParameter('lexik_jwt_authentication.token_ttl');
+
         return new JsonResponse([
             'code' => JsonResponse::HTTP_OK,
             'message' => $this->translator->trans('Success', [], 'message'),
             'response' => [
                 'token' => $responseData['token'],
                 'refreshToken' => $responseData['refresh_token'],
+                'tokenExpires' => (new DateTime())->setTimezone(new DateTimeZone('UTC'))->modify(sprintf('%s seconds', $tokenTTL))->format(DateTimeInterface::ATOM),
             ],
         ]);
     }

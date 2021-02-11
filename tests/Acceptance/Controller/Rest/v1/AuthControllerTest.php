@@ -47,9 +47,10 @@ final class AuthControllerTest extends SwaggerApiTestCase
         self::assertEquals(Response::HTTP_OK, $content['code']);
         self::assertEquals('Success', $content['message']);
 
-        self::assertCount(2, $content['response']);
+        self::assertCount(3, $content['response']);
         self::assertArrayHasKey('token', $content['response']);
         self::assertArrayHasKey('refreshToken', $content['response']);
+        self::assertArrayHasKey('tokenExpires', $content['response']);
 
         try {
             $userRepository->getByEmail($email);
@@ -161,9 +162,10 @@ final class AuthControllerTest extends SwaggerApiTestCase
         self::assertEquals(Response::HTTP_OK, $content['code']);
         self::assertEquals('Success', $content['message']);
 
-        self::assertCount(2, $content['response']);
+        self::assertCount(3, $content['response']);
         self::assertArrayHasKey('token', $content['response']);
         self::assertArrayHasKey('refreshToken', $content['response']);
+        self::assertArrayHasKey('tokenExpires', $content['response']);
     }
 
     public function testLoginWithNotExistEmailMustBeError(): void
@@ -329,9 +331,10 @@ final class AuthControllerTest extends SwaggerApiTestCase
         self::assertEquals(Response::HTTP_OK, $content['code']);
         self::assertEquals('Success', $content['message']);
 
-        self::assertCount(2, $content['response']);
+        self::assertCount(3, $content['response']);
         self::assertArrayHasKey('token', $content['response']);
         self::assertArrayHasKey('refreshToken', $content['response']);
+        self::assertArrayHasKey('tokenExpires', $content['response']);
     }
 
     public function createTokenFromUser(): string

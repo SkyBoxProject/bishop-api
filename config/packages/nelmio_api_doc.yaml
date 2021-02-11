@@ -20,6 +20,9 @@ nelmio_api_doc:
                         refreshToken:
                             type: string
                             example: "refresh_token"
+                        tokenExpires:
+                            type: string
+                            example: "2021-02-11T19:02:52+00:00"
     areas: # to filter documented areas
         default:
             host_patterns:
