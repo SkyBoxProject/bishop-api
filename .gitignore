@@ -28,6 +28,7 @@
 .idea
 
 ###> lexik/jwt-authentication-bundle ###
+/config/keys/jwt/*.pem
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
@@ -35,3 +36,5 @@
 /.php_cs
 /.php_cs.cache
 ###< friendsofphp/php-cs-fixer ###
+
+.env
