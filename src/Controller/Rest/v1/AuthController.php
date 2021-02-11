@@ -147,6 +147,13 @@ final class AuthController extends AbstractFOSRestController
             ]);
         }
 
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => $this->translator->trans('Email invalid!', [], 'error'),
+            ]);
+        }
+
         $this->dispatchMessage(new CreateUserCommand($email, $password));
 
         return $this->login($request);

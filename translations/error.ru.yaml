@@ -4,3 +4,4 @@
 'An Internal Error Occurred. Please try again or contact email.': 'Внутренняя ошибка. Пожалуйста, повторите попытку или свяжитесь с нами %support_email%'
 'User password is wrong!': 'Пароль пользователя неверен!'
 'Authorization required!': 'Требуется авторизация!'
+'Email invalid!': 'Email не соответствует стандартам!'

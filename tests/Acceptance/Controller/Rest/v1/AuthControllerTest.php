@@ -58,6 +58,30 @@ final class AuthControllerTest extends SwaggerApiTestCase
         }
     }
 
+    public function testRegisterWithInvalidEmailMustBeError(): void
+    {
+        $email = 'emailtest.com';
+        $password = 'test';
+
+        $requester = $this->getRequester();
+        $requester
+            ->assertResponseCode(200)
+            ->withQuery()
+            ->withMethod('POST')
+            ->withPath('/register')
+            ->withRequestBody([
+                'email' => $email,
+                'password' => $password,
+            ]);
+        $response = $this->assertRequest($requester);
+
+        $content = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertCount(2, $content);
+        self::assertEquals(Response::HTTP_BAD_REQUEST, $content['code']);
+        self::assertEquals('Email invalid!', $content['message']);
+    }
+
     public function testRegisterWithExistEmailMustBeError(): void
     {
         $referenceRepository = $this->loadFixtures([
