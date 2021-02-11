@@ -8,6 +8,9 @@ use App\Domain\User\Repository\UserRepository;
 use App\Tests\Acceptance\Controller\Rest\SwaggerApiTestCase;
 use App\Tests\DataFixtures\ORM\LoadUserFixtures;
 use AppBundle\Entity\UserProgress;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Events;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\DataFixtures\ORM\UserProgress\LoadUserProgressWithLikes;
 
@@ -239,6 +242,72 @@ final class AuthControllerTest extends SwaggerApiTestCase
         self::assertCount(2, $content);
         self::assertEquals(Response::HTTP_UNAUTHORIZED, $content['code']);
         self::assertEquals('Authorization required!', $content['message']);
+    }
+
+    public function testTokenRefreshWithInvalidRefreshTokenMustBeError(): void
+    {
+        $requester = $this->getRequester();
+        $requester
+            ->assertResponseCode(Response::HTTP_UNAUTHORIZED)
+            ->withQuery()
+            ->withMethod('POST')
+            ->withPath('/token/refresh')
+            ->withRequestBody([
+                'refresh_token' => '123',
+            ]);
+
+        $response = $this->assertRequest($requester);
+
+        $content = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertCount(2, $content);
+        self::assertEquals(Response::HTTP_UNAUTHORIZED, $content['code']);
+        self::assertEquals('Authorization required!', $content['message']);
+    }
+
+    public function testTokenRefreshWithRefreshTokenMustBeSuccess(): void
+    {
+        $referenceRepository = $this->loadFixtures([
+            LoadUserFixtures::class,
+        ])->getReferenceRepository();
+
+        /** @var User $user */
+        $user = $referenceRepository->getReference(LoadUserFixtures::REFERENCE_NAME);
+
+        $requester = $this->getRequester();
+        $requester
+            ->assertResponseCode(200)
+            ->withQuery()
+            ->withMethod('POST')
+            ->withPath('/login')
+            ->withRequestBody([
+                'email' => $user->getEmail(),
+                'password' => LoadUserFixtures::PLAIN_PASSWORD,
+            ]);
+        $response = $this->assertRequest($requester);
+
+        $content = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        $requester = $this->getRequester();
+        $requester
+            ->assertResponseCode(200)
+            ->withQuery()
+            ->withMethod('POST')
+            ->withPath('/token/refresh')
+            ->withRequestBody([
+                'refresh_token' => $content['response']['refreshToken'],
+            ]);
+        $response = $this->assertRequest($requester);
+
+        $content = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertCount(3, $content);
+        self::assertEquals(Response::HTTP_OK, $content['code']);
+        self::assertEquals('Success', $content['message']);
+
+        self::assertCount(2, $content['response']);
+        self::assertArrayHasKey('token', $content['response']);
+        self::assertArrayHasKey('refreshToken', $content['response']);
     }
 
     public function createTokenFromUser(): string

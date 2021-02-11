@@ -153,15 +153,50 @@ final class AuthController extends AbstractFOSRestController
     }
 
     /**
+     * @Operation(
+     *     tags={"Auth"},
+     *     summary="Token refresh",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             @OA\Property(property="refresh_token", type="string"),
+     *             required={"refresh_token"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returned when successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", example=200, type="integer"),
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="response", ref="#/components/schemas/tokenInfo")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Returned when successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", example=401, type="integer"),
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     *
      * @Rest\Post("/token/refresh")
      */
     public function refresh(Request $request, RefreshToken $refreshTokenService): JsonResponse
     {
-        $responseData = json_decode($refreshTokenService->refresh($request)->getContent());
+        $responseData = (array) json_decode($refreshTokenService->refresh($request)->getContent());
+
+        if (!isset($responseData['token'])) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_UNAUTHORIZED,
+                'message' => $this->translator->trans('Authorization required!', [], 'error'),
+            ], JsonResponse::HTTP_UNAUTHORIZED);
+        }
 
         return new JsonResponse([
             'code' => JsonResponse::HTTP_OK,
-            'message' => 'success',
+            'message' => $this->translator->trans('Success', [], 'message'),
             'response' => [
                 'token' => $responseData['token'],
                 'refreshToken' => $responseData['refresh_token'],
@@ -202,14 +237,14 @@ final class AuthController extends AbstractFOSRestController
         if ($user === null) {
             return new JsonResponse([
                 'code' => JsonResponse::HTTP_UNAUTHORIZED,
-                'message' => 'Failed',
+                'message' => $this->translator->trans('Failed', [], 'message'),
                 'isValid' => false,
             ], Response::HTTP_UNAUTHORIZED);
         }
 
         return new JsonResponse([
             'code' => JsonResponse::HTTP_OK,
-            'message' => 'Success',
+            'message' => $this->translator->trans('Success', [], 'message'),
             'isValid' => true,
         ]);
     }
