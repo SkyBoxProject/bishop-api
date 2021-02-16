@@ -2,8 +2,10 @@ doctrine:
     dbal:
         schema_filter: /^(?!view_|sessions)/
         url: '%env(resolve:DATABASE_URL)%'
-#        mapping_types:
-#            enum: string
+        mapping_types:
+            enum: string
+        types:
+            feed_type: App\Doctrine\Type\FeedType
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '13'
@@ -32,3 +34,8 @@ doctrine:
                         alias: Feed
                         prefix: 'App\Domain\Feed\Entity'
                         is_bundle: false
+
+services:
+    App\Doctrine\Type\:
+        resource: '../../src/Doctrine/Type/*'
+        public: true

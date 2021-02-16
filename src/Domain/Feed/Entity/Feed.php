@@ -2,6 +2,7 @@
 
 namespace App\Domain\Feed\Entity;
 
+use App\Domain\Feed\Entity\ValueObject\FeedType;
 use App\Domain\User\Entity\User;
 use DateTime;
 use DateTimeZone;
@@ -26,6 +27,11 @@ class Feed
      * @ORM\Column(name="url", type="string")
      */
     private $url;
+
+    /**
+     * @ORM\Column(name="type", type="feed_type")
+     */
+    private $type;
 
     /**
      * @ORM\Column(name="removed_description", type="string")
@@ -73,11 +79,12 @@ class Feed
      */
     private $updatedAt;
 
-    public function __construct(UuidV4 $uuidV4, User $user, string $url)
+    public function __construct(UuidV4 $uuidV4, User $user, string $url, FeedType $type)
     {
         $this->uuid = $uuidV4;
         $this->user = $user;
         $this->url = $url;
+        $this->type = $type;
 
         $this->createdAt = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
         $this->updatedAt = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
@@ -91,6 +98,11 @@ class Feed
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function getType(): FeedType
+    {
+        return $this->type;
     }
 
     public function getRemovedDescription(): string

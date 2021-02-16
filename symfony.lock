@@ -210,6 +210,9 @@
     "myclabs/deep-copy": {
         "version": "1.10.2"
     },
+    "myclabs/php-enum": {
+        "version": "1.8.0"
+    },
     "namshi/jose": {
         "version": "7.2.3"
     },
