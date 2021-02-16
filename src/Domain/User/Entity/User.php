@@ -39,6 +39,11 @@ class User implements UserInterface
      */
     private string $password;
 
+    /**
+     * @ORM\OneToMany (targetEntity="App\Domain\Feed\Entity\Feed", mappedBy="user")
+     */
+    private $feeds;
+
     public function getId(): ?UuidV4
     {
         return $this->id;

@@ -25,3 +25,10 @@ doctrine:
                         alias: User
                         prefix: 'App\Domain\User\Entity'
                         is_bundle: false
+                    Feed:
+                        mapping: true
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Domain/Feed/Entity'
+                        alias: Feed
+                        prefix: 'App\Domain\Feed\Entity'
+                        is_bundle: false
