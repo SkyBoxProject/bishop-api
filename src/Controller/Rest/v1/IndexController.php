@@ -11,9 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class IndexController extends AbstractFOSRestController
 {
-    /**
-     * @Route("/", name="default")
-     */
     public function index(): JsonResponse
     {
         return new JsonResponse([

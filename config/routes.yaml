@@ -12,6 +12,7 @@ api_v1:
 
 api_v1_default:
     path: /
+    methods: ['GET']
     host: '%api_domain%'
     schemes: [ '%http_scheme%' ]
     defaults:  { _controller: App\Controller\Rest\v1\IndexController::index }
