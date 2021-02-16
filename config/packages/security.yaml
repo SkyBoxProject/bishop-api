@@ -13,7 +13,7 @@ security:
                 property: email
     firewalls:
         api:
-            pattern: ^/(?!doc|login|register|token/refresh).+
+            pattern: ^/(?!doc|login|register|token/refresh|api/doc|api/doc.json).+
             stateless: true
             host: '%api_domain%'
             # by default, the feature allows 5 login attempts per minute
@@ -50,7 +50,7 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/api/doc, role: ROLE_ADMIN }
         - { host: '%api_domain%$', path: '^/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { host: '%api_domain%$', path: '^/(?!doc|login|register|token/refresh|/token/check)', roles: IS_AUTHENTICATED_FULLY }
+        - { host: '%api_domain%$', path: '^/(?!doc|login|register|token/refresh|/token/check|api/doc|api/doc.json)', roles: IS_AUTHENTICATED_FULLY }
         - { host: '%api_domain%$', path: '^/token/refresh', roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { host: '%api_domain%$', path: '^/token/check', roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
