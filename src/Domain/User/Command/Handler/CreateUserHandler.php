@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Command\Handler;
 
+use App\Domain\Security\UserRole;
 use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Exception\EmailAlreadyExist;
@@ -38,6 +39,8 @@ final class CreateUserHandler implements MessageHandlerInterface
         $encodedPassword = $this->encodePasswordWithUser($user, $command->getPassword());
 
         $user->setPassword($encodedPassword);
+
+        $user->addRole(UserRole::ROLE_VERIFIED);
 
         $this->userRepository->save($user);
 
