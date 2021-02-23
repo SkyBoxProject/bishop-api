@@ -2,8 +2,11 @@
 
 namespace App\Domain\User\Entity;
 
+use App\Domain\EmailVerificationToken\Entity\EmailVerificationToken;
 use App\Domain\Security\UserRole;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\UuidV4;
@@ -28,7 +31,14 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private ?string $email;
+    private string $email;
+
+    /**
+     * @OneToOne(targetEntity="App\Domain\EmailVerificationToken\Entity\EmailVerificationToken", cascade={"all"})
+     *
+     * @JoinColumn(name="email_verification_token", referencedColumnName="token")
+     */
+    private EmailVerificationToken $emailVerificationToken;
 
     /**
      * @ORM\Column(type="json")
@@ -40,21 +50,26 @@ class User implements UserInterface
      */
     private string $password;
 
+    public function __construct(UuidV4 $uuid, string $email)
+    {
+        $this->id = $uuid;
+        $this->email = $email;
+        $this->emailVerificationToken = new EmailVerificationToken($this);
+    }
+
     public function getId(): ?UuidV4
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function getEmailVerificationToken(): EmailVerificationToken
     {
-        $this->email = $email;
-
-        return $this;
+        return $this->emailVerificationToken;
     }
 
     /**
@@ -62,7 +77,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
@@ -106,7 +121,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -119,7 +134,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): void
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }
@@ -127,7 +142,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;

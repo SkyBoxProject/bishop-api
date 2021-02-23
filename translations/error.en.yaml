@@ -5,3 +5,4 @@
 'User password is wrong!': 'User password is wrong!'
 'Authorization required!': 'Authorization required!'
 'Email invalid!': 'Email invalid!'
+'Email verification token not found.': 'Email verification token (%token%) not found.'

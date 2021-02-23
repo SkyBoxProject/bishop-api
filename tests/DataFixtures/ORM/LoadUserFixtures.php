@@ -7,6 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Uid\Uuid;
 
 final class LoadUserFixtures extends Fixture
 {
@@ -25,13 +26,11 @@ final class LoadUserFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        $user = new User();
-        $user
-            ->setEmail($faker->email)
-            ->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                self::PLAIN_PASSWORD
-            ));
+        $user = new User(Uuid::v4(), $faker->email);
+        $user->setPassword($this->passwordEncoder->encodePassword(
+            $user,
+            self::PLAIN_PASSWORD
+        ));
 
         $manager->persist($user);
         $manager->flush();
