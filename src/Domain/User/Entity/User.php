@@ -36,7 +36,7 @@ class User implements UserInterface
     /**
      * @OneToOne(targetEntity="App\Domain\EmailVerificationToken\Entity\EmailVerificationToken", cascade={"all"})
      *
-     * @JoinColumn(name="email_verification_token", referencedColumnName="token")
+     * @JoinColumn(name="email_verification_token", referencedColumnName="token", onDelete="SET NULL")
      */
     private EmailVerificationToken $emailVerificationToken;
 

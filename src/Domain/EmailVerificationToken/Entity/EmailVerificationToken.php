@@ -26,7 +26,7 @@ class EmailVerificationToken
     /**
      * @OneToOne(targetEntity="App\Domain\User\Entity\User")
      *
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;
 
