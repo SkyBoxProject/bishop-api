@@ -5,3 +5,4 @@
 'User password is wrong!': 'Пароль пользователя неверен!'
 'Authorization required!': 'Требуется авторизация!'
 'Email invalid!': 'Email не соответствует стандартам!'
+'Email verification token not found.': 'Токен подтверждения электронной почты (%token%) не найден.'

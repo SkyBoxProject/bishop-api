@@ -25,3 +25,10 @@ doctrine:
                         alias: User
                         prefix: 'App\Domain\User\Entity'
                         is_bundle: false
+                    EmailVerificationToken:
+                        mapping: true
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Domain/EmailVerificationToken/Entity'
+                        alias: EmailVerificationToken
+                        prefix: 'App\Domain\EmailVerificationToken\Entity'
+                        is_bundle: false

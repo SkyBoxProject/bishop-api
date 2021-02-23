@@ -2,6 +2,7 @@
 
 return [
     'Domain' => [
+        'EmailVerificationToken',
         'User',
     ],
 ];

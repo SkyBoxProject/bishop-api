@@ -2,6 +2,7 @@
 
 namespace App\Controller\Rest\v1;
 
+use App\Domain\EmailVerificationToken\Command\VerifyEmailCommand;
 use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Repository\UserRepository;
 use DateTime;
@@ -16,11 +17,13 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 /**
  * @Route(condition="request.attributes.get('version') == 'v1'")
@@ -74,7 +77,7 @@ final class AuthController extends AbstractFOSRestController
      *     )
      * )
      *
-     * @Rest\Post("/login")
+     * @Route("/login", methods={"POST"})
      */
     public function login(Request $request): JsonResponse
     {
@@ -186,7 +189,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="401",
-     *         description="Returned when successful",
+     *         description="Returned when error",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", example=401, type="integer"),
      *             @OA\Property(property="message", type="string")
@@ -223,6 +226,40 @@ final class AuthController extends AbstractFOSRestController
     /**
      * @Operation(
      *     tags={"Auth"},
+     *     summary="Email verification",
+     *     @OA\Response(
+     *         response="302",
+     *         description="Returned when successful"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Returned when error"
+     *     )
+     * )
+     *
+     * @Route("/email-verification/{token}", methods={"GET"})
+     */
+    public function emailVerification(string $token): RedirectResponse
+    {
+        $indexPageUrl = sprintf('http://%s', $this->getParameter('web_domain'));
+        $notFoundPageUrl = sprintf('http://%s/404', $this->getParameter('web_domain'));
+
+        if (empty($token)) {
+            $this->redirect($notFoundPageUrl);
+        }
+
+        try {
+            $this->dispatchMessage(new VerifyEmailCommand($token));
+        } catch (Throwable $exception) {
+            return $this->redirect($notFoundPageUrl);
+        }
+
+        return $this->redirect($indexPageUrl);
+    }
+
+    /**
+     * @Operation(
+     *     tags={"Auth"},
      *     summary="Token check",
      *     @OA\Response(
      *         response="200",
@@ -250,7 +287,7 @@ final class AuthController extends AbstractFOSRestController
     {
         $user = $this->getUser();
 
-        if ($user === null) {
+        if (null === $user) {
             return new JsonResponse([
                 'code' => JsonResponse::HTTP_UNAUTHORIZED,
                 'message' => $this->translator->trans('Failed', [], 'message'),
