@@ -5,4 +5,7 @@ return [
         'EmailVerificationToken',
         'User',
     ],
+    'Module' => [
+        'Feed',
+    ],
 ];

@@ -1,0 +1,20 @@
+services:
+    App\Module\Feed\Basic\BasicFeedManager:
+        class: App\Module\Feed\Basic\BasicFeedManager
+        autowire: true
+        public: true
+        arguments:
+            $factories:
+                - '@App\Module\Feed\Basic\Factory\RawProductsBasicFeedFactory'
+                - '@App\Module\Feed\Basic\Factory\CategoriesBasicFeedFactory'
+            $modules:
+                - '@App\Module\Feed\Basic\Module\ResolveNameBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveCategoryBasicFeedModule'
+
+    App\Module\Feed\Basic\Factory\:
+        resource: '%kernel.project_dir%/src/Module/Feed/Basic/Factory/*Factory.php'
+        autowire: true
+
+    App\Module\Feed\Basic\Module\:
+        resource: '%kernel.project_dir%/src/Module/Feed/Basic/Module/*Module.php'
+        autowire: true

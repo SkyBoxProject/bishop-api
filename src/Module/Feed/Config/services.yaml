@@ -1,0 +1,14 @@
+imports:
+    - { resource: ../Basic/Config/services.yaml }
+
+#imports:
+#    - { resource: ../src/Command/Config/config.yaml }
+
+services:
+    App\Module\Feed\FeedManager:
+        class: App\Module\Feed\FeedManager
+        autowire: true
+        public: true
+        arguments:
+            $feedManagers:
+                - '@App\Module\Feed\Basic\BasicFeedManager'

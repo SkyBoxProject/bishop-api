@@ -6,16 +6,16 @@ use MyCLabs\Enum\Enum;
 
 final class FeedType extends Enum
 {
-    private const MINI = 'mini';
-    private const FULL = 'full';
+    private const MICRO = 'micro';
+    private const BASIC = 'basic';
 
-    public static function mini(): self
+    public static function micro(): self
     {
-        return new self(self::MINI);
+        return new self(self::MICRO);
     }
 
-    public static function full(): self
+    public static function basic(): self
     {
-        return new self(self::FULL);
+        return new self(self::BASIC);
     }
 }
