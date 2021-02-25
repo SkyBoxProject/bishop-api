@@ -9,4 +9,4 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
         arguments:
-          [ '@translator.default', '@monolog.logger', '%support_email%', '%kernel.environment%' ]
+          [ '@translator.default', '@monolog.logger', '%support_email%', '%kernel.environment%', '%force_api_exception_listener%' ]

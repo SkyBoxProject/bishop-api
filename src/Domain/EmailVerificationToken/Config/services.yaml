@@ -1,0 +1,17 @@
+services:
+    App\Domain\EmailVerificationToken\Command\Handler\:
+        resource: '%kernel.project_dir%/src/Domain/EmailVerificationToken/Command/Handler/*Handler.php'
+        autowire: true
+        tags: [ messenger.message_handler ]
+
+    App\Domain\EmailVerificationToken\Command\Handler\SendEmailConfirmationMessagesHandler:
+        class: App\Domain\EmailVerificationToken\Command\Handler\SendEmailConfirmationMessagesHandler
+        autowire: true
+        arguments:
+            $robotEmail: '%robot_email%'
+        tags: [ messenger.message_handler ]
+
+    App\Domain\EmailVerificationToken\Repository\EmailVerificationTokenRepository:
+        class: App\Domain\EmailVerificationToken\Repository\EmailVerificationTokenRepository
+        autowire: true
+        public: true

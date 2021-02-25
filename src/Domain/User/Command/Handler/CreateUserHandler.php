@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Command\Handler;
 
+use App\Domain\EmailVerificationToken\Command\SendEmailConfirmationMessagesCommand;
 use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Exception\EmailAlreadyExist;
@@ -13,6 +14,7 @@ use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 final class CreateUserHandler implements MessageHandlerInterface
@@ -32,14 +34,15 @@ final class CreateUserHandler implements MessageHandlerInterface
     {
         $this->checkNotExistUserByEmail($command->getEmail());
 
-        $user = new User();
-        $user->setEmail($command->getEmail());
+        $user = new User(Uuid::v4(), $command->getEmail());
 
         $encodedPassword = $this->encodePasswordWithUser($user, $command->getPassword());
 
         $user->setPassword($encodedPassword);
 
         $this->userRepository->save($user);
+
+        $this->sendEmailConfirmationMessagesCommand($user);
 
         return $user;
     }
@@ -66,5 +69,10 @@ final class CreateUserHandler implements MessageHandlerInterface
     private function encodePasswordWithUser(User $user, string $password): string
     {
         return $this->passwordEncoder->encodePassword($user, $password);
+    }
+
+    private function sendEmailConfirmationMessagesCommand(User $user): void
+    {
+        $this->messageBus->dispatch(new SendEmailConfirmationMessagesCommand($user));
     }
 }
