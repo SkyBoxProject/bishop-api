@@ -5,3 +5,4 @@ parameters:
     api_domain: '%env(resolve:API_DOMAIN)%'
     support_email: '%env(resolve:SUPPORT_EMAIL)%'
     robot_email: '%env(resolve:ROBOT_EMAIL)%'
+    force_api_exception_listener: '%env(bool:FORCE_API_EXCEPTION_LISTENER)%'

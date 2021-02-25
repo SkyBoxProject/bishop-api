@@ -20,18 +20,20 @@ final class ApiExceptionListener
     private LoggerInterface $logger;
     private string $supportEmail;
     private string $environment;
+    private string $isForceApiExceptionListener;
 
-    public function __construct(TranslatorInterface $translator, LoggerInterface $logger, string $supportEmail, string $environment)
+    public function __construct(TranslatorInterface $translator, LoggerInterface $logger, string $supportEmail, string $environment, bool $isForceApiExceptionListener)
     {
         $this->translator = $translator;
         $this->logger = $logger;
         $this->supportEmail = $supportEmail;
         $this->environment = $environment;
+        $this->isForceApiExceptionListener = $isForceApiExceptionListener;
     }
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (!in_array($this->environment, ['prod', 'test'], true)) {
+        if (!$this->isForceApiExceptionListener && !in_array($this->environment, ['prod', 'test'], true)) {
             return;
         }
 
