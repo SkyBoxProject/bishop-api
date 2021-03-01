@@ -15,16 +15,18 @@ final class BasicFeedContainer implements FeedContainerInterface
 
     private $categories;
 
+    /**
+     * @param SimpleXMLElement[] $rawProducts
+     */
+    public function __construct(Feed $feed, $rawProducts)
+    {
+        $this->feed = $feed;
+        $this->rawProducts = $rawProducts;
+    }
+
     public function getFeed(): Feed
     {
         return $this->feed;
-    }
-
-    public function setFeed(Feed $feed): self
-    {
-        $this->feed = $feed;
-
-        return $this;
     }
 
     /**

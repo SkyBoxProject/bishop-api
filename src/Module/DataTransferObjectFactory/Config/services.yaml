@@ -1,0 +1,5 @@
+services:
+    App\Module\DataTransferObjectFactory\DataTransferObjectFactory:
+        class: App\Module\DataTransferObjectFactory\DataTransferObjectFactory
+        autowire: true
+        public: true

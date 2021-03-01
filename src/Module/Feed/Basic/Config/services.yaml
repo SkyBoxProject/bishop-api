@@ -10,6 +10,16 @@ services:
             $modules:
                 - '@App\Module\Feed\Basic\Module\ResolveNameBasicFeedModule'
                 - '@App\Module\Feed\Basic\Module\ResolveCategoryBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveDescriptionBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolvePageDescriptionBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveAnnotationBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolvePageTitleBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveKeywordsBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveAddedCityBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolvePriceBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveStockAvailabilityBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveImagesBasicFeedModule'
+                - '@App\Module\Feed\Basic\Module\ResolveArticleNumberBasicFeedModule'
 
     App\Module\Feed\Basic\Factory\:
         resource: '%kernel.project_dir%/src/Module/Feed/Basic/Factory/*Factory.php'

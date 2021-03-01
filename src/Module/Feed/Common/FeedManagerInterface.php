@@ -7,7 +7,6 @@ use App\Domain\Feed\Entity\ValueObject\FeedType;
 use App\Module\Feed\Common\Container\FeedContainerInterface;
 use App\Module\Feed\Common\Module\ModuleInterface;
 use App\Module\Feed\Common\Product\ProductInterface;
-use Generator;
 
 interface FeedManagerInterface
 {
@@ -18,9 +17,7 @@ interface FeedManagerInterface
 
     public function createEmptyProduct(): ProductInterface;
 
-    public function build(Feed $feed): self;
-
-    public function getContainer(): FeedContainerInterface;
+    public function build(Feed $feed): FeedContainerInterface;
 
     public static function getSupportType(): FeedType;
 }

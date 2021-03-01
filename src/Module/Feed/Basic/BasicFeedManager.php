@@ -16,7 +16,6 @@ final class BasicFeedManager implements FeedManagerInterface
 {
     private array $factories;
     private array $modules;
-    private BasicFeedContainer $container;
 
     /**
      * @param ContainerFactoryInterface[] $factories
@@ -26,8 +25,6 @@ final class BasicFeedManager implements FeedManagerInterface
     {
         $this->factories = $factories;
         $this->modules = $modules;
-
-        $this->container = new BasicFeedContainer();
     }
 
     /**
@@ -36,11 +33,6 @@ final class BasicFeedManager implements FeedManagerInterface
     public function getModules(): array
     {
         return $this->modules;
-    }
-
-    public function getContainer(): BasicFeedContainer
-    {
-        return $this->container;
     }
 
     public function createEmptyProduct(): ProductInterface
@@ -53,15 +45,17 @@ final class BasicFeedManager implements FeedManagerInterface
         return FeedType::basic();
     }
 
-    public function build(Feed $feed): self
+    public function build(Feed $feed): BasicFeedContainer
     {
         $rawParameters = $this->getRawParameters($feed->getUrl());
 
+        $container = new BasicFeedContainer($feed, $rawParameters);
+
         foreach ($this->factories as $factory) {
-            $factory->create($this->container, $feed, $rawParameters);
+            $factory->create($container, $feed, $rawParameters);
         }
 
-        return $this;
+        return $container;
     }
 
     /**

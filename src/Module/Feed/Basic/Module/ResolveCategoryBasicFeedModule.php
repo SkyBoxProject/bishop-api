@@ -16,15 +16,19 @@ final class ResolveCategoryBasicFeedModule implements ResolveCategoryModuleInter
 
     /**
      * @param FeedContainerInterface|BasicFeedContainer $container
-     * @param SimpleXMLElement                          $rawParameters
+     * @param SimpleXMLElement $rawParameters
      */
     public function execute(FeedContainerInterface $container, ProductInterface $product, $rawProduct): void
     {
-        $category = $this->findCategory($container->getCategories(), (int) $rawProduct->{self::CATEGORY_ID});
+        //todo ДОДЕЛАТЬ!
+        try {
+            $category = $this->findCategory($container->getCategories(), (int) $rawProduct->{self::CATEGORY_ID});
 
-        $category = str_replace(',', '', $category);
+            $category = str_replace(',', '', $category);
 
-        $product->setCategory($category);
+            $product->setCategory($category);
+        } catch (\Throwable $exception) {
+        }
     }
 
     private function findCategory(array $categories, int $id): string

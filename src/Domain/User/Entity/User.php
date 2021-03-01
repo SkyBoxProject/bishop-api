@@ -3,6 +3,7 @@
 namespace App\Domain\User\Entity;
 
 use App\Domain\EmailVerificationToken\Entity\EmailVerificationToken;
+use App\Domain\Feed\Entity\Feed;
 use App\Domain\Security\UserRole;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -151,5 +152,12 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function addFeed(Feed $feed): self
+    {
+        $this->feeds[] = $feed;
+
+        return $this;
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Domain\Feed\Entity;
 
 use App\Domain\Feed\Entity\ValueObject\FeedType;
+use App\Domain\Feed\TransferObject\FeedDTO;
 use App\Domain\User\Entity\User;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -15,7 +17,7 @@ use Symfony\Component\Uid\UuidV4;
  *
  * @final
  */
-class Feed
+class Feed implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -51,7 +53,7 @@ class Feed
     /**
      * @ORM\Column(name="is_remove_last_image", type="boolean", options={"default":false})
      */
-    private $isRemoveLastImage = false;
+    private $removeLastImage = false;
 
     /**
      * @ORM\Column(name="text_after_description", type="string")
@@ -61,7 +63,7 @@ class Feed
     /**
      * @ORM\Column(name="is_exclude_out_of_stock_items", type="boolean", options={"default":false})
      */
-    private $isExcludeOutOfStockItems = false;
+    private $excludeOutOfStockItems = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Domain\User\Entity\User", inversedBy="feeds")
@@ -88,6 +90,8 @@ class Feed
 
         $this->createdAt = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
         $this->updatedAt = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
+
+        $this->user->addFeed($this);
     }
 
     public function getUuid(): UuidV4
@@ -110,6 +114,13 @@ class Feed
         return $this->removedDescription;
     }
 
+    public function setRemovedDescription(string $removedDescription): self
+    {
+        $this->removedDescription = $removedDescription;
+
+        return $this;
+    }
+
     /**
      * @return string[]
      */
@@ -118,14 +129,45 @@ class Feed
         return $this->stopWords;
     }
 
+    /**
+     * @param string[] $stopWords
+     */
+    public function setStopWords(array $stopWords): self
+    {
+        $this->stopWords = $stopWords;
+
+        return $this;
+    }
+
     public function getAddedCity(): string
     {
         return $this->addedCity;
     }
 
+    public function setAddedCity(string $addedCity): self
+    {
+        $this->addedCity = $addedCity;
+
+        return $this;
+    }
+
     public function isRemoveLastImage(): bool
     {
-        return $this->isRemoveLastImage;
+        return $this->removeLastImage;
+    }
+
+    public function markAsRemoveLastImage(): self
+    {
+        $this->removeLastImage = true;
+
+        return $this;
+    }
+
+    public function unmarkAsRemoveLastImage(): self
+    {
+        $this->removeLastImage = false;
+
+        return $this;
     }
 
     public function getTextAfterDescription(): string
@@ -133,9 +175,30 @@ class Feed
         return $this->textAfterDescription;
     }
 
+    public function setTextAfterDescription(string $textAfterDescription): self
+    {
+        $this->textAfterDescription = $textAfterDescription;
+
+        return $this;
+    }
+
     public function isExcludeOutOfStockItems(): bool
     {
-        return $this->isExcludeOutOfStockItems;
+        return $this->excludeOutOfStockItems;
+    }
+
+    public function markAsExcludeOutOfStockItems(): self
+    {
+        $this->excludeOutOfStockItems = true;
+
+        return $this;
+    }
+
+    public function unmarkAsExcludeOutOfStockItems(): self
+    {
+        $this->excludeOutOfStockItems = false;
+
+        return $this;
     }
 
     public function getUser(): User
@@ -151,6 +214,36 @@ class Feed
     public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
+    }
+
+    public function updateFromDTO(FeedDTO $feedDTO): self
+    {
+        if ($feedDTO->getRemovedDescription() !== null) {
+            $this->setRemovedDescription($feedDTO->getRemovedDescription());
+        }
+
+        if ($feedDTO->getStopWords() !== null) {
+            $this->setStopWords($feedDTO->getStopWords());
+        }
+
+        if ($feedDTO->getAddedCity() !== null) {
+            $this->setAddedCity($feedDTO->getAddedCity());
+        }
+
+        if ($feedDTO->getTextAfterDescription() !== null) {
+            $this->setTextAfterDescription($feedDTO->getTextAfterDescription());
+        }
+
+
+        if ($feedDTO->isRemoveLastImage() !== null) {
+            $feedDTO->isRemoveLastImage() ? $this->markAsRemoveLastImage() : $this->unmarkAsRemoveLastImage();
+        }
+
+        if ($feedDTO->isExcludeOutOfStockItems() !== null) {
+            $feedDTO->isExcludeOutOfStockItems() ? $this->markAsExcludeOutOfStockItems() : $this->unmarkAsExcludeOutOfStockItems();
+        }
+
+        return $this;
     }
 
     public function __clone()
@@ -190,5 +283,21 @@ class Feed
         $beforeUpdatedStartTimeInTimestamp = $feed->getCreatedAt() ? $feed->getCreatedAt()->getTimestamp() : 0;
 
         return $startTimeInTimestamp === $beforeUpdatedStartTimeInTimestamp;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => (string) $this->getUuid(),
+            'url' => $this->url,
+            'removedDescription' => $this->removedDescription,
+            'stopWords' => $this->stopWords,
+            'addedCity' => $this->addedCity,
+            'removeLastImage' => $this->removeLastImage,
+            'textAfterDescription' => $this->textAfterDescription,
+            'excludeOutOfStockItems' => $this->excludeOutOfStockItems,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+        ];
     }
 }

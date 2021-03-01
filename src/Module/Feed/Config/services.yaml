@@ -1,9 +1,6 @@
 imports:
     - { resource: ../Basic/Config/services.yaml }
 
-#imports:
-#    - { resource: ../src/Command/Config/config.yaml }
-
 services:
     App\Module\Feed\FeedManager:
         class: App\Module\Feed\FeedManager
@@ -12,3 +9,8 @@ services:
         arguments:
             $feedManagers:
                 - '@App\Module\Feed\Basic\BasicFeedManager'
+
+    App\Module\Feed\FeedChecker:
+        class: App\Module\Feed\FeedChecker
+        autowire: true
+        public: true

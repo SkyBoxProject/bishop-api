@@ -1,0 +1,20 @@
+services:
+    App\Domain\Feed\Command\Handler\:
+        resource: '%kernel.project_dir%/src/Domain/Feed/Command/Handler/*Handler.php'
+        autowire: true
+        tags: [ messenger.message_handler ]
+
+    App\Domain\Feed\Query\Handler\:
+        resource: '%kernel.project_dir%/src/Domain/Feed/Query/Handler/*Handler.php'
+        autowire: true
+        tags: [ messenger.message_handler ]
+
+    App\Domain\Feed\Factory\:
+        resource: '%kernel.project_dir%/src/Domain/Feed/Factory/*Factory.php'
+        autowire: true
+        public: true
+
+    App\Domain\Feed\Repository\FeedRepository:
+        class: App\Domain\Feed\Repository\FeedRepository
+        autowire: true
+        public: true

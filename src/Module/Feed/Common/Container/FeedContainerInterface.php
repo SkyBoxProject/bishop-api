@@ -8,8 +8,6 @@ interface FeedContainerInterface
 {
     public function getFeed(): Feed;
 
-    public function setFeed(Feed $feed): self;
-
     /**
      * @return mixed
      */

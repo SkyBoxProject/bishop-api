@@ -33,8 +33,7 @@ final class FeedManager
     {
         $feedManager = $this->getSupportManager($feed->getType());
 
-        $feedManager->build($feed);
-        $container = $feedManager->getContainer();
+        $container = $feedManager->build($feed);
 
         $stream = fopen('php://output', 'wb');
 
