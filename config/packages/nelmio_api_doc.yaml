@@ -25,6 +25,10 @@ nelmio_api_doc:
                             example: "refresh_token"
                         tokenExpires:
                             $ref: '#/components/schemas/dateTime'
+                        roles:
+                            type: array
+                            items:
+                                type: string
                 feed:
                     type: object
                     properties:
