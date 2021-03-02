@@ -92,12 +92,12 @@ final class FeedController extends AbstractFOSRestController
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(property="url", type="string"),
-     *             @OA\Property(property="removed_description", type="string"),
-     *             @OA\Property(property="stop_words", type="array", @OA\Items(type="string")),
-     *             @OA\Property(property="added_city", type="string"),
-     *             @OA\Property(property="text_after_description", type="string"),
-     *             @OA\Property(property="is_remove_last_image", type="boolean"),
-     *             @OA\Property(property="is_exclude_out_of_stock_items", type="boolean"),
+     *             @OA\Property(property="removedDescription", type="string"),
+     *             @OA\Property(property="stopWords", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="addedCity", type="string"),
+     *             @OA\Property(property="textAfterDescription", type="string"),
+     *             @OA\Property(property="removeLastImage", type="boolean"),
+     *             @OA\Property(property="excludeOutOfStockItems", type="boolean"),
      *             required={"url"}
      *         )
      *     ),
@@ -135,12 +135,12 @@ final class FeedController extends AbstractFOSRestController
      *     summary="Обновить конфигурацию фида",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
-     *             @OA\Property(property="removed_description", type="string"),
-     *             @OA\Property(property="stop_words", type="array", @OA\Items(type="string")),
-     *             @OA\Property(property="added_city", type="string"),
-     *             @OA\Property(property="text_after_description", type="string"),
-     *             @OA\Property(property="is_remove_last_image", type="boolean"),
-     *             @OA\Property(property="is_exclude_out_of_stock_items", type="boolean")
+     *             @OA\Property(property="removedDescription", type="string"),
+     *             @OA\Property(property="stopWords", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="addedCity", type="string"),
+     *             @OA\Property(property="textAfterDescription", type="string"),
+     *             @OA\Property(property="removeLastImage", type="boolean"),
+     *             @OA\Property(property="excludeOutOfStockItems", type="boolean")
      *         )
      *     ),
      *     @OA\Response(

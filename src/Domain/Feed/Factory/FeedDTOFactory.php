@@ -35,36 +35,36 @@ final class FeedDTOFactory
             //skip
         }
 
-        if ($request->request->has('removed_description')) {
-            $dto->setRemovedDescription($request->request->get('removed_description', null));
+        if ($request->request->has('removedDescription')) {
+            $dto->setRemovedDescription($request->request->get('removedDescription', null));
         }
 
-        if ($request->request->has('stop_words')) {
-            $dto->setStopWords((array) $request->request->get('stop_words', null));
+        if ($request->request->has('stopWords')) {
+            $dto->setStopWords((array) $request->request->get('stopWords', null));
         }
 
-        if ($request->request->has('added_city')) {
-            $dto->setAddedCity($request->request->get('added_city', null));
+        if ($request->request->has('addedCity')) {
+            $dto->setAddedCity($request->request->get('addedCity', null));
         }
 
-        if ($request->request->has('text_after_description')) {
-            $dto->setTextAfterDescription($request->request->get('text_after_description', null));
+        if ($request->request->has('textAfterDescription')) {
+            $dto->setTextAfterDescription($request->request->get('textAfterDescription', null));
         }
 
-        if ($request->request->has('is_remove_last_image')) {
+        if ($request->request->has('removeLastImage')) {
             $this->dataTransferObjectFactory->resolveBoolean(
                 $dto,
-                $request->request->getBoolean('is_remove_last_image'),
+                $request->request->getBoolean('removeLastImage'),
                 static function (FeedDTO $feedDTO, bool $isTrue): void {
                     $isTrue ? $feedDTO->markAsRemoveLastImage() : $feedDTO->unmarkAsRemoveLastImage();
                 }
             );
         }
 
-        if ($request->request->has('is_exclude_out_of_stock_items')) {
+        if ($request->request->has('excludeOutOfStockItems')) {
             $this->dataTransferObjectFactory->resolveBoolean(
                 $dto,
-                $request->request->getBoolean('is_exclude_out_of_stock_items'),
+                $request->request->getBoolean('excludeOutOfStockItems'),
                 static function (FeedDTO $feedDTO, bool $isTrue): void {
                     $isTrue ? $feedDTO->markAsExcludeOutOfStockItems() : $feedDTO->unmarkAsExcludeOutOfStockItems();
                 }
