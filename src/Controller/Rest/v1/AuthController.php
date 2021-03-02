@@ -51,8 +51,8 @@ final class AuthController extends AbstractFOSRestController
 
     /**
      * @Operation(
-     *     tags={"Auth"},
-     *     summary="User authentication",
+     *     tags={"Авторизация"},
+     *     summary="Вход и получение токена доступа",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(property="email", type="string"),
@@ -62,7 +62,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Returned when successful",
+     *         description="Возвращается, когда успех",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", example=200, type="integer"),
      *             @OA\Property(property="message", type="string"),
@@ -71,7 +71,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="400",
-     *         description="Returned when email or password empty",
+     *         description="Возвращается, когда email или пароль пустые",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", type="integer", example=400),
      *             @OA\Property(property="message", type="string")
@@ -120,8 +120,8 @@ final class AuthController extends AbstractFOSRestController
 
     /**
      * @Operation(
-     *     tags={"Auth"},
-     *     summary="User registration",
+     *     tags={"Авторизация"},
+     *     summary="Регистрация и получение токена доступа",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(property="email", type="string"),
@@ -131,7 +131,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Returned when successful",
+     *         description="Возвращается, когда успех",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", example=200, type="integer"),
      *             @OA\Property(property="message", type="string"),
@@ -140,7 +140,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="400",
-     *         description="Returned when email or password empty",
+     *         description="Возвращается, когда email или пароль пустые",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", type="integer", example=400),
      *             @OA\Property(property="message", type="string")
@@ -176,8 +176,8 @@ final class AuthController extends AbstractFOSRestController
 
     /**
      * @Operation(
-     *     tags={"Auth"},
-     *     summary="Token refresh",
+     *     tags={"Авторизация"},
+     *     summary="Обеовить токен доступа по токену обновления",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(property="refresh_token", type="string"),
@@ -186,7 +186,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Returned when successful",
+     *         description="Возвращается, когда успех",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", example=200, type="integer"),
      *             @OA\Property(property="message", type="string"),
@@ -195,7 +195,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="401",
-     *         description="Returned when error",
+     *         description="Возвращается, когда ошибка",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", example=401, type="integer"),
      *             @OA\Property(property="message", type="string")
@@ -231,15 +231,15 @@ final class AuthController extends AbstractFOSRestController
 
     /**
      * @Operation(
-     *     tags={"Auth"},
-     *     summary="Email verification",
+     *     tags={"Авторизация"},
+     *     summary="Подтверждение электронной почты",
      *     @OA\Response(
      *         response="302",
-     *         description="Returned when successful"
+     *         description="Возвращается, когда успех"
      *     ),
      *     @OA\Response(
      *         response="404",
-     *         description="Returned when error"
+     *         description="Возвращается, когда ошибка"
      *     )
      * )
      *
@@ -265,11 +265,11 @@ final class AuthController extends AbstractFOSRestController
 
     /**
      * @Operation(
-     *     tags={"Auth"},
-     *     summary="Token check",
+     *     tags={"Авторизация"},
+     *     summary="Проверка токена",
      *     @OA\Response(
      *         response="200",
-     *         description="Returned when successful",
+     *         description="Возвращается, когда успех",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", example=200, type="integer"),
      *             @OA\Property(property="message", type="string"),
@@ -278,7 +278,7 @@ final class AuthController extends AbstractFOSRestController
      *     ),
      *     @OA\Response(
      *         response="401",
-     *         description="Returned when wrong token",
+     *         description="Возвращается, когда ошибка токена доступа",
      *         @OA\JsonContent(
      *             @OA\Property(property="code", example=401, type="integer"),
      *             @OA\Property(property="message", type="string"),

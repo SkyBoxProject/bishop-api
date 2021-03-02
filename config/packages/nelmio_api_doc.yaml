@@ -11,6 +11,9 @@ nelmio_api_doc:
             version: 1.0.0
         components:
             schemas:
+                dateTime:
+                    type: datetime
+                    example: "2021-02-11T19:02:52+00:00"
                 tokenInfo:
                     type: object
                     properties:
@@ -21,8 +24,40 @@ nelmio_api_doc:
                             type: string
                             example: "refresh_token"
                         tokenExpires:
+                            $ref: '#/components/schemas/dateTime'
+                feed:
+                    type: object
+                    properties:
+                        id:
                             type: string
-                            example: "2021-02-11T19:02:52+00:00"
+                            example: "03f9a882-552c-4fb2-b610-633e5b8bbf96"
+                        url:
+                            type: string
+                            example: "http://bishop.test/xml/client.xml"
+                        removedDescription:
+                            type: string
+                            example: "номер телефона +7 900 ..."
+                        stopWords:
+                            type: array
+                            items:
+                                type: string
+                            example: ["пистолет", "тик"]
+                        addedCity:
+                            type: string
+                            example: "Екатеринбург"
+                        removeLastImage:
+                            type: boolean
+                            example: true
+                        textAfterDescription:
+                            type: string
+                            example: "куплю гараж +7 999 ..."
+                        excludeOutOfStockItems:
+                            type: boolean
+                            example: true
+                        createdAt:
+                            $ref: '#/components/schemas/dateTime'
+                        updatedAt:
+                            $ref: '#/components/schemas/dateTime'
     areas: # to filter documented areas
         default:
             host_patterns:

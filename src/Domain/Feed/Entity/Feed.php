@@ -296,8 +296,8 @@ class Feed implements JsonSerializable
             'removeLastImage' => $this->removeLastImage,
             'textAfterDescription' => $this->textAfterDescription,
             'excludeOutOfStockItems' => $this->excludeOutOfStockItems,
-            'createdAt' => $this->createdAt,
-            'updatedAt' => $this->updatedAt,
+            'createdAt' => $this->createdAt->format(DateTime::ATOM),
+            'updatedAt' => $this->updatedAt->format(DateTime::ATOM),
         ];
     }
 }
