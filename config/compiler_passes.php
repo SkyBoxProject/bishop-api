@@ -4,6 +4,7 @@ return [
     'Domain' => [
         'EmailVerificationToken',
         'Feed',
+        'License',
         'User',
     ],
     'Module' => [
