@@ -114,6 +114,7 @@ final class AuthController extends AbstractFOSRestController
                 'token' => $event->getData()['token'],
                 'refreshToken' => $event->getData()['refresh_token'],
                 'tokenExpires' => (new DateTime())->setTimezone(new DateTimeZone('UTC'))->modify(sprintf('%s seconds', $tokenTTL))->format(DateTimeInterface::ATOM),
+                'roles' => $user->getRoles(),
             ],
         ]);
     }
