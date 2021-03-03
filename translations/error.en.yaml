@@ -7,3 +7,5 @@
 'Email invalid!': 'Email invalid!'
 'Email verification token not found.': 'Email verification token (%token%) not found.'
 'Feed not found.': 'Feed (%uuid%) not found.'
+'License not found by the product.': 'License not found by the product (%product%).'
+'License not found.': 'License (%uuid%) not found.'

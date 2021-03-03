@@ -4,7 +4,10 @@ namespace App\Domain\User\Entity;
 
 use App\Domain\EmailVerificationToken\Entity\EmailVerificationToken;
 use App\Domain\Feed\Entity\Feed;
+use App\Domain\License\Collection\LicenseCollection;
+use App\Domain\License\Entity\License;
 use App\Domain\Security\UserRole;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -56,11 +59,19 @@ class User implements UserInterface
      */
     private $feeds;
 
+    /**
+     * @ORM\OneToMany (targetEntity="App\Domain\License\Entity\License", mappedBy="user")
+     */
+    private $licenses;
+
     public function __construct(UuidV4 $uuid, string $email)
     {
         $this->id = $uuid;
         $this->email = $email;
         $this->emailVerificationToken = new EmailVerificationToken($this);
+
+        $this->licenses = new ArrayCollection();
+        $this->feeds = new ArrayCollection();
     }
 
     public function getId(): ?UuidV4
@@ -154,9 +165,26 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
+    public function getFeeds()
+    {
+        return $this->feeds;
+    }
+
     public function addFeed(Feed $feed): self
     {
         $this->feeds[] = $feed;
+
+        return $this;
+    }
+
+    public function getLicenses(): LicenseCollection
+    {
+        return new LicenseCollection($this->licenses);
+    }
+
+    public function addLicense(License $license): self
+    {
+        $this->licenses[] = $license;
 
         return $this;
     }

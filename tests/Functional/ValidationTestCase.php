@@ -12,7 +12,14 @@ abstract class ValidationTestCase extends TestCase
 {
     use FixturesTrait;
 
-    private ValidatorInterface $validator;
+    private ?ValidatorInterface $validator;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->validator = $this->getContainer()->get('validator');
+    }
 
     protected function assertOnlyFieldsAreInvalid($command, array $properties, $value, string $message): void
     {
