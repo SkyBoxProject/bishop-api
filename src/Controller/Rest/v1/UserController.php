@@ -2,12 +2,12 @@
 
 namespace App\Controller\Rest\v1;
 
+use App\Domain\License\Normalizer\LicenseNormalizer;
 use App\Domain\User\Entity\User;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -43,8 +43,10 @@ final class UserController extends AbstractFOSRestController
      * )
      *
      * @Route("/user", methods={"GET"})
+     * @param LicenseNormalizer $licenseNormalizer
+     * @return JsonResponse
      */
-    public function getUserInfo(Request $request): JsonResponse
+    public function getUserInfo(LicenseNormalizer $licenseNormalizer): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -56,6 +58,7 @@ final class UserController extends AbstractFOSRestController
                 'id' => $user->getId(),
                 'email' => $user->getEmail(),
                 'roles' => $user->getRoles(),
+                'licenses' => $licenseNormalizer->normalizeCollectionForUser($user->getLicenses()),
             ],
         ]);
     }

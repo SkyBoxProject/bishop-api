@@ -9,6 +9,11 @@ services:
         autowire: true
         public: true
 
+    App\Domain\License\Normalizer\:
+        resource: '%kernel.project_dir%/src/Domain/License/Normalizer/*Normalizer.php'
+        autowire: true
+        public: true
+
     App\Domain\License\Repository\LicenseRepository:
         class: App\Domain\License\Repository\LicenseRepository
         autowire: true
