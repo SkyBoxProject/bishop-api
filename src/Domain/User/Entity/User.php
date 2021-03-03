@@ -7,6 +7,8 @@ use App\Domain\Feed\Entity\Feed;
 use App\Domain\License\Collection\LicenseCollection;
 use App\Domain\License\Entity\License;
 use App\Domain\Security\UserRole;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -64,11 +66,23 @@ class User implements UserInterface
      */
     private $licenses;
 
+    /**
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;
+
     public function __construct(UuidV4 $uuid, string $email)
     {
         $this->id = $uuid;
         $this->email = $email;
         $this->emailVerificationToken = new EmailVerificationToken($this);
+        $this->createdAt = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
+        $this->updatedAt = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
 
         $this->licenses = new ArrayCollection();
         $this->feeds = new ArrayCollection();

@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @final
@@ -58,11 +59,32 @@ class UserRepository implements PasswordUpgraderInterface
                 ->getQuery()
                 ->getSingleResult();
         } catch (NoResultException $exception) {
-            throw new UserNotFound(sprintf('User not found by email "%s"', $email));
+            throw new UserNotFound();
         }
 
         if ($user === null) {
-            throw new UserNotFound(sprintf('User not found by email "%s"', $email));
+            throw new UserNotFound();
+        }
+
+        return $user;
+    }
+
+    public function getById(UuidV4 $id): User
+    {
+        try {
+            /** @var User $user */
+            $user = $this->userRepository->createQueryBuilder('u')
+                ->andWhere('u.id = :id')
+                ->setParameter('id', $id->toBinary())
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getSingleResult();
+        } catch (NoResultException $exception) {
+            throw new UserNotFound();
+        }
+
+        if ($user === null) {
+            throw new UserNotFound();
         }
 
         return $user;

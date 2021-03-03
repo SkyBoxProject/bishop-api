@@ -6,6 +6,14 @@ web:
 
 api_v1:
     resource: '@App/Controller/Rest/v1/'
+    exclude: '../../src/Controller/Rest/v1/Admin/*.php'
+    type: annotation
+    host: '%api_domain%'
+    schemes: ['%http_scheme%']
+
+api_admin_v1:
+    resource: '@App/Controller/Rest/v1/Admin'
+    prefix: '/admin'
     type: annotation
     host: '%api_domain%'
     schemes: ['%http_scheme%']
