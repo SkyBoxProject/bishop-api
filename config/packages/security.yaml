@@ -16,8 +16,6 @@ security:
             pattern: ^/(?!doc|login|register|token/refresh|api/doc|api/doc.json|_(profiler|wdt)).+
             stateless: true
             host: '%api_domain%'
-            # by default, the feature allows 5 login attempts per minute
-            login_throttling: null
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
@@ -49,6 +47,7 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/api/doc, role: ROLE_ADMIN }
         - { host: '%api_domain%$', path: '^/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { host: '%api_domain%$', path: '^/register', roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { host: '%api_domain%$', path: '^/token/refresh', roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { host: '%api_domain%$', path: '^/token/check', roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { host: '%api_domain%$', path: '^/email-verification', roles: IS_AUTHENTICATED_ANONYMOUSLY }

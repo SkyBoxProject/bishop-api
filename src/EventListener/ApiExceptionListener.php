@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Security\Core\Exception\TooManyLoginAttemptsAuthenticationException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -33,7 +34,7 @@ final class ApiExceptionListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (!$this->isForceApiExceptionListener && !in_array($this->environment, ['prod', 'test'], true)) {
+        if ($this->isForceApiExceptionListener && !in_array($this->environment, ['prod', 'test'], true)) {
             return;
         }
 
@@ -63,6 +64,10 @@ final class ApiExceptionListener
             return self::resolveStatusCode($exception->getPrevious());
         }
 
+        if ($exception instanceof TooManyLoginAttemptsAuthenticationException) {
+            return Response::HTTP_UNAUTHORIZED;
+        }
+
         if (self::isHttpStatusCode($exception->getCode())) {
             return $exception->getCode();
         }
@@ -80,6 +85,10 @@ final class ApiExceptionListener
 
         if ($exception instanceof HandlerFailedException) {
             return self::resolveCode($exception->getPrevious());
+        }
+
+        if ($exception instanceof TooManyLoginAttemptsAuthenticationException) {
+            return Response::HTTP_UNAUTHORIZED . '0';
         }
 
         if (self::isHttpStatusCode($exception->getCode())) {
@@ -110,6 +119,10 @@ final class ApiExceptionListener
 
         if ($exception instanceof HandlerFailedException) {
             return $this->resolveMessage($exception->getPrevious());
+        }
+
+        if ($exception instanceof TooManyLoginAttemptsAuthenticationException) {
+            return 'Too many login attempts!';
         }
 
         $this->logError($exception);
