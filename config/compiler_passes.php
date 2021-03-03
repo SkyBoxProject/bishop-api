@@ -10,5 +10,6 @@ return [
     'Module' => [
         'Feed',
         'DataTransferObjectFactory',
+        'RateLimiter',
     ],
 ];

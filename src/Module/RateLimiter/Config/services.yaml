@@ -1,0 +1,48 @@
+services:
+    App\Module\RateLimiter\LoginThrottlingListener:
+        class: App\Module\RateLimiter\LoginThrottlingListener
+        arguments: ["@request_stack", "@limiter.api_login_request_rate_limiter"]
+        tags:
+            - { name: kernel.event_subscriber, event: security.event_dispatcher.api }
+        public: true
+
+    limiter.api_login_request_rate_limiter:
+        class: App\Module\RateLimiter\ApiLoginRequestRateLimiter
+        arguments: ["@limiter.api_login_global_rate_limiter", "@limiter.api_login_local_rate_limiter"]
+        public: true
+
+    limiter.api_login_local_rate_limiter:
+        class: Symfony\Component\RateLimiter\RateLimiterFactory
+        arguments:
+            $config:
+                policy: "fixed_window"
+                limit: 5
+                interval: "5 minute"
+                id: "api_login_rate_limiter"
+            $storage: "@limiter.storage.api_login_local_rate_limiter"
+            $lockFactory: "@lock.default.factory"
+        public: true
+
+    limiter.storage.api_login_local_rate_limiter:
+        class: Symfony\Component\RateLimiter\Storage\CacheStorage
+        arguments:
+            $pool: "@cache.rate_limiter"
+        public: true
+
+    limiter.api_login_global_rate_limiter:
+        class: Symfony\Component\RateLimiter\RateLimiterFactory
+        arguments:
+            $config:
+                policy: "fixed_window"
+                limit: 5
+                interval: "5 minute"
+                id: "api_login_rate_limiter"
+            $storage: "@limiter.storage.api_global_login_rate_limiter"
+            $lockFactory: "@lock.default.factory"
+        public: true
+
+    limiter.storage.api_global_login_rate_limiter:
+        class: Symfony\Component\RateLimiter\Storage\CacheStorage
+        arguments:
+            $pool: "@cache.rate_limiter"
+        public: true
