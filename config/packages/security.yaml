@@ -51,5 +51,6 @@ security:
         - { host: '%api_domain%$', path: '^/token/refresh', roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { host: '%api_domain%$', path: '^/token/check', roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { host: '%api_domain%$', path: '^/email-verification', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { host: '%api_domain%$', path: '^/user', roles: ROLE_USER }
         - { host: '%api_domain%$', path: '^/admin/*', roles: ROLE_ADMIN }
         - { host: '%api_domain%$', path: '^/(?!doc|login|register|token/refresh|/token/check|api/doc|api/doc.json/_profiler)', roles: ROLE_VERIFIED }
