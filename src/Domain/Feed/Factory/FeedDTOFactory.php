@@ -47,6 +47,10 @@ final class FeedDTOFactory
             $dto->setAddedCity($request->request->get('addedCity', null));
         }
 
+        if ($request->request->has('name')) {
+         $dto->setName($request->request->get('name', null));
+        }
+
         if ($request->request->has('textAfterDescription')) {
             $dto->setTextAfterDescription($request->request->get('textAfterDescription', null));
         }

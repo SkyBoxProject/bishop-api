@@ -31,6 +31,11 @@ class Feed implements JsonSerializable
     private $url;
 
     /**
+     * @ORM\Column(name="name", type="string")
+     */
+    private $name;
+
+    /**
      * @ORM\Column(name="type", type="feed_type")
      */
     private $type;
@@ -102,6 +107,18 @@ class Feed implements JsonSerializable
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getType(): FeedType
@@ -230,8 +247,12 @@ class Feed implements JsonSerializable
             $this->setAddedCity($feedDTO->getAddedCity());
         }
 
+        if ($feedDTO->getName() !== null) {
+            $this->setName($feedDTO->getName());
+        }
+
         if ($feedDTO->getTextAfterDescription() !== null) {
-            $this->setTextAfterDescription($feedDTO->getTextAfterDescription());
+         $this->setTextAfterDescription($feedDTO->getTextAfterDescription());
         }
 
 
@@ -259,6 +280,7 @@ class Feed implements JsonSerializable
 
         return $this->getUrl() === $feed->getUrl()
             && $this->getRemovedDescription() === $feed->getRemovedDescription()
+            && $this->getName() === $feed->getName()
             && $this->getStopWords() === $feed->getStopWords()
             && $this->getAddedCity() === $feed->getAddedCity()
             && $this->isRemoveLastImage() === $feed->isRemoveLastImage()
@@ -290,6 +312,7 @@ class Feed implements JsonSerializable
         return [
             'id' => (string) $this->getUuid(),
             'url' => $this->url,
+            'name' => $this->name,
             'removedDescription' => $this->removedDescription,
             'stopWords' => $this->stopWords,
             'addedCity' => $this->addedCity,

@@ -34,6 +34,11 @@ abstract class Feed
     protected $url;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var bool
      */
     protected $isSkipLastImage = false;

@@ -8,6 +8,8 @@ final class FeedDTO
 {
     private ?string $url;
 
+    private ?string $name;
+
     private ?FeedType $type;
 
     private ?string $removedDescription;
@@ -72,6 +74,18 @@ final class FeedDTO
     public function setStopWords(array $stopWords): self
     {
         $this->stopWords = $stopWords;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

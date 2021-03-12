@@ -35,6 +35,9 @@ nelmio_api_doc:
                         id:
                             type: string
                             example: "03f9a882-552c-4fb2-b610-633e5b8bbf96"
+                        name:
+                            type: string
+                            example: "My feed for best market"
                         url:
                             type: string
                             example: "http://bishop.test/xml/client.xml"

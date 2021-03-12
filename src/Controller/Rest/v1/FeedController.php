@@ -91,6 +91,7 @@ final class FeedController extends AbstractFOSRestController
      *     summary="Создать новую конфигурацию фида",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string"),
      *             @OA\Property(property="url", type="string"),
      *             @OA\Property(property="removedDescription", type="string"),
      *             @OA\Property(property="stopWords", type="array", @OA\Items(type="string")),
@@ -135,6 +136,7 @@ final class FeedController extends AbstractFOSRestController
      *     summary="Обновить конфигурацию фида",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string"),
      *             @OA\Property(property="removedDescription", type="string"),
      *             @OA\Property(property="stopWords", type="array", @OA\Items(type="string")),
      *             @OA\Property(property="addedCity", type="string"),
