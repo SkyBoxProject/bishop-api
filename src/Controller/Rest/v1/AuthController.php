@@ -322,6 +322,12 @@ final class AuthController extends AbstractApiController
      * @Operation(
      *     tags={"Пользователь"},
      *     summary="Сменить Email",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string"),
+     *             required={"email"}
+     *         )
+     *     ),
      *     @OA\Response(
      *         response="200",
      *         description="Возвращается, когда успех",
@@ -362,12 +368,13 @@ final class AuthController extends AbstractApiController
     /**
      * @Operation(
      *     tags={"Пользователь"},
-     *     summary="Смена пароля",
+     *     summary="Сменить пароль",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
-     *             @OA\Property(property="email", type="string"),
      *             @OA\Property(property="password", type="string"),
-     *             required={"email", "password"}
+     *             @OA\Property(property="newPassword", type="string"),
+     *             @OA\Property(property="newPasswordConfirmed", type="string"),
+     *             required={"password", "newPassword", "newPasswordConfirmed"}
      *         )
      *     ),
      *     @OA\Response(
