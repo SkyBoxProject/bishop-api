@@ -3,7 +3,9 @@
 namespace App\Module\Feed;
 
 use App\Domain\Feed\Entity\ValueObject\FeedType;
+use App\Domain\Feed\Exception\FeedTypeNotFound;
 use SimpleXMLElement;
+use Throwable;
 
 final class FeedChecker
 {
@@ -19,13 +21,17 @@ final class FeedChecker
             return FeedType::basic();
         }
 
-        throw new \RuntimeException('Feed not found');
+        throw new FeedTypeNotFound($url);
     }
 
     public function getContent(string $url): SimpleXMLElement
     {
-        $xmlString = file_get_contents($url);
+        try {
+            $xmlString = file_get_contents($url);
 
-        return simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            return simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_COMPACT | LIBXML_PARSEHUGE);
+        } catch (Throwable $exception) {
+            throw new FeedTypeNotFound($url);
+        }
     }
 }

@@ -13,3 +13,4 @@
 'Password is less than 8 characters!': 'Password is less than 8 characters!'
 'The old password invalid!': 'The old password invalid!'
 'The confirmation password does not equal the new password!': 'The confirmation password does not equal the new password!'
+'Feed type not found.': 'Feed type not found by url (%url%).'

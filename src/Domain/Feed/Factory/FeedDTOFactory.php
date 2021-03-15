@@ -2,6 +2,7 @@
 
 namespace App\Domain\Feed\Factory;
 
+use App\Domain\Feed\Exception\FeedTypeNotFound;
 use App\Domain\Feed\TransferObject\FeedDTO;
 use App\Module\DataTransferObjectFactory\DataTransferObjectFactory;
 use App\Module\Feed\FeedChecker;
@@ -19,20 +20,19 @@ final class FeedDTOFactory
         $this->feedChecker = $feedChecker;
     }
 
+    /**
+     * @throws FeedTypeNotFound
+     */
     public function createFromRequest(Request $request): FeedDTO
     {
         $dto = new FeedDTO();
 
-        try {
-            if ($request->request->has('url')) {
-                $dto->setUrl($request->request->get('url', null));
+        if ($request->request->has('url')) {
+            $dto->setUrl($request->request->get('url', null));
 
-                $feedType = $this->feedChecker->checkUrl($dto->getUrl());
+            $feedType = $this->feedChecker->checkUrl($dto->getUrl());
 
-                $dto->setType($feedType);
-            }
-        } catch (Throwable $exception) {
-            //skip
+            $dto->setType($feedType);
         }
 
         if ($request->request->has('name')) {

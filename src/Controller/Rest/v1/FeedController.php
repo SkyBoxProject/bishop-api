@@ -5,6 +5,7 @@ namespace App\Controller\Rest\v1;
 use App\Domain\Feed\Command\CreateFeedCommand;
 use App\Domain\Feed\Command\UpdateFeedCommand;
 use App\Domain\Feed\Entity\Feed;
+use App\Domain\Feed\Exception\FeedTypeNotFound;
 use App\Domain\Feed\Factory\FeedDTOFactory;
 use App\Domain\Feed\Query\GetFeedByUserQuery;
 use App\Domain\Feed\Query\GetFeedByUuidQuery;
