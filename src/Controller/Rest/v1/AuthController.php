@@ -4,7 +4,9 @@ namespace App\Controller\Rest\v1;
 
 use App\Domain\EmailVerificationToken\Command\VerifyEmailCommand;
 use App\Domain\User\Command\ChangeEmailUserCommand;
+use App\Domain\User\Command\ChangePasswordUserCommand;
 use App\Domain\User\Command\CreateUserCommand;
+use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepository;
 use DateTime;
 use DateTimeInterface;
@@ -21,6 +23,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -159,6 +162,13 @@ final class AuthController extends AbstractApiController
             return new JsonResponse([
                 'code' => JsonResponse::HTTP_BAD_REQUEST,
                 'message' => $this->translator->trans('Email or password not be empty.', [], 'error'),
+            ]);
+        }
+
+        if (mb_strlen($password) < 8) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => $this->translator->trans('Password is less than 8 characters!', [], 'error'),
             ]);
         }
 
@@ -346,6 +356,83 @@ final class AuthController extends AbstractApiController
 
         $this->dispatchMessage(new ChangeEmailUserCommand($user, $email));
 
+        return $this->createTokenResponse($user);
+    }
+
+    /**
+     * @Operation(
+     *     tags={"Пользователь"},
+     *     summary="Смена пароля",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="password", type="string"),
+     *             required={"email", "password"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Возвращается, когда успех",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", example=200, type="integer"),
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="response", ref="#/components/schemas/tokenInfo")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Возвращается, когда пароль пустой или совпадает со старым",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=400),
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     *
+     * @Rest\Post("/user/change-password")
+     */
+    public function changePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
+    {
+        $user = $this->getUser();
+        $password = $request->request->get('password', '');
+        $newPassword = $request->request->get('newPassword', '');
+        $newPasswordConfirmed = $request->request->get('newPasswordConfirmed', '');
+
+        if (empty($password) || empty($newPassword) || empty($newPasswordConfirmed)) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => $this->translator->trans('Password not be empty.', [], 'error'),
+            ]);
+        }
+
+        if (mb_strlen($newPassword) < 8) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => $this->translator->trans('Password is less than 8 characters!', [], 'error'),
+            ]);
+        }
+
+        if (!$passwordEncoder->isPasswordValid($user, $password)) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => $this->translator->trans('The old password invalid!', [], 'error'),
+            ]);
+        }
+
+        if ($newPassword !== $newPasswordConfirmed) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => $this->translator->trans('The confirmation password does not equal the new password!', [], 'error'),
+            ]);
+        }
+
+        $this->dispatchMessage(new ChangePasswordUserCommand($user, $newPassword));
+
+        return $this->createTokenResponse($user);
+    }
+
+    private function createTokenResponse(User $user): JsonResponse
+    {
         $token = $this->authManager->create($user);
 
         $event = new AuthenticationSuccessEvent(['token' => $token], $user, new JsonResponse());
@@ -363,11 +450,6 @@ final class AuthController extends AbstractApiController
                 'tokenExpires' => (new DateTime())->setTimezone(new DateTimeZone('UTC'))->modify(sprintf('%s seconds', $tokenTTL))->format(DateTimeInterface::ATOM),
                 'roles' => $user->getRoles(),
             ],
-        ]);
-
-        return new JsonResponse([
-            'code' => JsonResponse::HTTP_OK,
-            'message' => $this->translator->trans('Success', [], 'message'),
         ]);
     }
 }

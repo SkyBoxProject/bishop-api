@@ -9,3 +9,7 @@
 'Feed not found.': 'Конфигурация фида (%uuid%) не найдена.'
 'License not found by the product.': 'Лицензия продукта (%product%) не найдена.'
 'License not found.': 'Лицензия (%uuid%) не найдена.'
+'Password not be empty.': 'Пароль не должен быть пустым'
+'Password is less than 8 characters!': 'Пароль менее 8 символов!'
+'The old password invalid!': 'Старый пароль неверный!'
+'The confirmation password does not equal the new password!': 'Пароль подтверждения не равен новому паролю!'

@@ -9,3 +9,7 @@
 'Feed not found.': 'Feed (%uuid%) not found.'
 'License not found by the product.': 'License not found by the product (%product%).'
 'License not found.': 'License (%uuid%) not found.'
+'Password not be empty.': 'Password not be empty.'
+'Password is less than 8 characters!': 'Password is less than 8 characters!'
+'The old password invalid!': 'The old password invalid!'
+'The confirmation password does not equal the new password!': 'The confirmation password does not equal the new password!'

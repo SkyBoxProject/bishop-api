@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class AbstractApiController extends AbstractFOSRestController
 {
     /**
-     * @return object|UserInterface|User|null
+     * @return UserInterface|User
      */
     public function getUser()
     {

@@ -36,10 +36,7 @@ class UserRepository implements PasswordUpgraderInterface
     {
         $user = $this->getByEmail($email);
 
-        $isPasswordValid = $this->passwordEncoder->isPasswordValid(
-            $user,
-            $password
-        );
+        $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $password);
 
         if (!$isPasswordValid) {
             throw new PasswordNotEquals();
