@@ -98,6 +98,13 @@ class User implements UserInterface
         return $this->email;
     }
 
+    public function setEmail(string $email): User
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getEmailVerificationToken(): EmailVerificationToken
     {
         return $this->emailVerificationToken;
@@ -143,6 +150,19 @@ class User implements UserInterface
         }
 
         $this->roles[] = $role;
+
+        return $this;
+    }
+
+    public function removeRole(string $role): self
+    {
+        if (!in_array($role, $this->getRoles(), true)) {
+            return $this;
+        }
+
+        $keyRole = array_search($role, $this->roles, true);
+
+        unset($this->roles[$keyRole]);
 
         return $this;
     }

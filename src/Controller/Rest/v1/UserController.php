@@ -4,7 +4,6 @@ namespace App\Controller\Rest\v1;
 
 use App\Domain\License\Normalizer\LicenseNormalizer;
 use App\Domain\User\Entity\User;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +13,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @Route(condition="request.attributes.get('version') == 'v1'")
  */
-final class UserController extends AbstractFOSRestController
+final class UserController extends AbstractApiController
 {
     private TranslatorInterface $translator;
 
@@ -43,8 +42,6 @@ final class UserController extends AbstractFOSRestController
      * )
      *
      * @Route("/user", methods={"GET"})
-     * @param LicenseNormalizer $licenseNormalizer
-     * @return JsonResponse
      */
     public function getUserInfo(LicenseNormalizer $licenseNormalizer): JsonResponse
     {

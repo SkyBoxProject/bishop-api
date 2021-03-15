@@ -3,12 +3,12 @@
 namespace App\Controller\Rest\v1;
 
 use App\Domain\EmailVerificationToken\Command\VerifyEmailCommand;
+use App\Domain\User\Command\ChangeEmailUserCommand;
 use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Repository\UserRepository;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -29,7 +29,7 @@ use Throwable;
 /**
  * @Route(condition="request.attributes.get('version') == 'v1'")
  */
-final class AuthController extends AbstractFOSRestController
+final class AuthController extends AbstractApiController
 {
     private JWTTokenManagerInterface $authManager;
     private UserRepository $userRepository;
@@ -305,6 +305,69 @@ final class AuthController extends AbstractFOSRestController
             'code' => JsonResponse::HTTP_OK,
             'message' => $this->translator->trans('Success', [], 'message'),
             'isValid' => true,
+        ]);
+    }
+
+    /**
+     * @Operation(
+     *     tags={"Пользователь"},
+     *     summary="Сменить Email",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Возвращается, когда успех",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", example=200, type="integer"),
+     *             @OA\Property(property="message", type="string", example="Success")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Возвращается, когда email не соответствует формату",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=400),
+     *             @OA\Property(property="message", type="string", example="Email invalid!")
+     *         )
+     *     )
+     * )
+     *
+     * @Route("/user/change-email", methods={"POST"})
+     */
+    public function changeEmail(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        $email = $request->request->get('email');
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse([
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'message' => $this->translator->trans('Email invalid!', [], 'error'),
+            ]);
+        }
+
+        $this->dispatchMessage(new ChangeEmailUserCommand($user, $email));
+
+        $token = $this->authManager->create($user);
+
+        $event = new AuthenticationSuccessEvent(['token' => $token], $user, new JsonResponse());
+
+        $this->dispatcher->dispatch($event, Events::AUTHENTICATION_SUCCESS);
+
+        $tokenTTL = $this->getParameter('lexik_jwt_authentication.token_ttl');
+
+        return new JsonResponse([
+            'code' => JsonResponse::HTTP_OK,
+            'message' => $this->translator->trans('Success', [], 'message'),
+            'response' => [
+                'token' => $event->getData()['token'],
+                'refreshToken' => $event->getData()['refresh_token'],
+                'tokenExpires' => (new DateTime())->setTimezone(new DateTimeZone('UTC'))->modify(sprintf('%s seconds', $tokenTTL))->format(DateTimeInterface::ATOM),
+                'roles' => $user->getRoles(),
+            ],
+        ]);
+
+        return new JsonResponse([
+            'code' => JsonResponse::HTTP_OK,
+            'message' => $this->translator->trans('Success', [], 'message'),
         ]);
     }
 }
