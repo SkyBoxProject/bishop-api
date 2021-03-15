@@ -36,6 +36,11 @@ class Feed implements JsonSerializable
     private $type;
 
     /**
+     * @ORM\Column(name="name", type="string")
+     */
+    private $name = '';
+
+    /**
      * @ORM\Column(name="removed_description", type="string")
      */
     private $removedDescription = '';
@@ -107,6 +112,11 @@ class Feed implements JsonSerializable
     public function getType(): FeedType
     {
         return $this->type;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function getRemovedDescription(): string
@@ -218,6 +228,10 @@ class Feed implements JsonSerializable
 
     public function updateFromDTO(FeedDTO $feedDTO): self
     {
+        if ($feedDTO->getName() !== null) {
+            $this->name = $feedDTO->getName();
+        }
+
         if ($feedDTO->getRemovedDescription() !== null) {
             $this->setRemovedDescription($feedDTO->getRemovedDescription());
         }
@@ -258,6 +272,7 @@ class Feed implements JsonSerializable
         }
 
         return $this->getUrl() === $feed->getUrl()
+            && $this->getName() === $feed->getName()
             && $this->getRemovedDescription() === $feed->getRemovedDescription()
             && $this->getStopWords() === $feed->getStopWords()
             && $this->getAddedCity() === $feed->getAddedCity()
@@ -290,6 +305,8 @@ class Feed implements JsonSerializable
         return [
             'id' => (string) $this->getUuid(),
             'url' => $this->url,
+            'type' => $this->type->getValue(),
+            'name' => $this->name,
             'removedDescription' => $this->removedDescription,
             'stopWords' => $this->stopWords,
             'addedCity' => $this->addedCity,

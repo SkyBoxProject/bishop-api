@@ -9,7 +9,6 @@ use App\Domain\Feed\Factory\FeedDTOFactory;
 use App\Domain\Feed\Query\GetFeedByUserQuery;
 use App\Domain\Feed\Query\GetFeedByUuidQuery;
 use App\Module\Feed\FeedManager;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as OA;
@@ -25,7 +24,7 @@ use Throwable;
 /**
  * @Route(condition="request.attributes.get('version') == 'v1'")
  */
-final class FeedController extends AbstractFOSRestController
+final class FeedController extends AbstractApiController
 {
     private TranslatorInterface $translator;
 

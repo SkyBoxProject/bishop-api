@@ -6,21 +6,23 @@ use App\Domain\Feed\Entity\ValueObject\FeedType;
 
 final class FeedDTO
 {
-    private ?string $url;
+    private ?string $url = null;
 
-    private ?FeedType $type;
+    private ?FeedType $type = null;
 
-    private ?string $removedDescription;
+    private ?string $name = null;
 
-    private ?array $stopWords;
+    private ?string $removedDescription = null;
 
-    private ?string $addedCity;
+    private ?array $stopWords = null;
 
-    private ?bool $removeLastImage;
+    private ?string $addedCity = null;
 
-    private ?string $textAfterDescription;
+    private ?bool $removeLastImage = null;
 
-    private ?bool $excludeOutOfStockItems;
+    private ?string $textAfterDescription = null;
+
+    private ?bool $excludeOutOfStockItems = null;
 
     public function getUrl(): ?string
     {
@@ -42,6 +44,18 @@ final class FeedDTO
     public function setType(FeedType $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

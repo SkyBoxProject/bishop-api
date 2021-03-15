@@ -35,6 +35,10 @@ final class FeedDTOFactory
             //skip
         }
 
+        if ($request->request->has('name')) {
+            $dto->setName($request->request->get('name', null));
+        }
+
         if ($request->request->has('removedDescription')) {
             $dto->setRemovedDescription($request->request->get('removedDescription', null));
         }
